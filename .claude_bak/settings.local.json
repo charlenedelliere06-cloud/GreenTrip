@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh auth:*)",
+      "Bash(git --version:*)",
+      "Bash(git config:*)",
+      "Bash(/usr/local/bin/gh auth status:*)",
+      "Bash(/usr/local/bin/gh repo list:*)",
+      "Bash(/usr/local/bin/gh repo view charlenedelliere06-cloud/GreenTrip)",
+      "Bash(/usr/local/bin/gh issue list:*)",
+      "Bash(/usr/local/bin/gh api:*)",
+      "Bash(python3:*)",
+      "Bash(npx create-next-app:*)",
+      "Bash(npx create-next-app@latest:*)"
+    ]
+  }
+}
