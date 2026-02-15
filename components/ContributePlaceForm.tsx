@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { cities } from "@/lib/mock-data";
 import { PhotoUpload } from "./PhotoUpload";
+import { LocationPicker } from "./LocationPicker";
 
 interface ContributePlaceFormProps {
   userId: string;
@@ -16,17 +18,30 @@ const placeTypes = [
 ];
 
 export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
+  const searchParams = useSearchParams();
+  const initialLat = searchParams.get("lat") ? parseFloat(searchParams.get("lat")!) : null;
+  const initialLng = searchParams.get("lng") ? parseFloat(searchParams.get("lng")!) : null;
+
   const [cityId, setCityId] = useState("");
   const [name, setName] = useState("");
   const [type, setType] = useState("supermarket");
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
+  const [lat, setLat] = useState<number | null>(initialLat);
+  const [lng, setLng] = useState<number | null>(initialLng);
   const [googleMapsUrl, setGoogleMapsUrl] = useState("");
   const [tagsInput, setTagsInput] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+
+  const selectedCity = cities.find((c) => c.id === cityId);
+
+  const handleLocationChange = (newLat: number, newLng: number) => {
+    setLat(newLat);
+    setLng(newLng);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,14 +55,11 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
     setLoading(true);
 
     try {
-      // Préparer les tags
       const tags = tagsInput
         .split(",")
         .map((t) => t.trim())
         .filter(Boolean);
 
-      // Pour l'instant, pas d'upload réel des photos (Supabase pas encore configuré)
-      // Les photos seront uploadées quand Supabase Storage sera configuré
       const photoUrls: string[] = [];
 
       const body = {
@@ -58,6 +70,8 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
         place_type: type,
         place_address: address,
         place_description: description,
+        place_lat: lat,
+        place_lng: lng,
         place_google_maps_url: googleMapsUrl || undefined,
         place_tags: tags,
         place_photos: photoUrls,
@@ -94,6 +108,8 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
             setName("");
             setAddress("");
             setDescription("");
+            setLat(null);
+            setLng(null);
             setGoogleMapsUrl("");
             setTagsInput("");
             setPhotos([]);
@@ -168,16 +184,32 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
         </div>
       </div>
 
+      {/* Localisation sur la carte */}
+      <div>
+        <label className="block text-sm font-medium text-forest mb-2">
+          Localisation
+        </label>
+        <p className="text-xs text-forest/50 mb-2">
+          Place le lieu sur la carte avec ta position GPS ou en cliquant directement dessus.
+        </p>
+        <LocationPicker
+          lat={lat}
+          lng={lng}
+          onLocationChange={handleLocationChange}
+          center={selectedCity ? [selectedCity.lat, selectedCity.lng] : undefined}
+        />
+      </div>
+
       {/* Adresse */}
       <div>
         <label className="block text-sm font-medium text-forest mb-1">
-          Adresse *
+          Adresse
+          <span className="text-forest/40 font-normal ml-1">(optionnel si placé sur la carte)</span>
         </label>
         <input
           type="text"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          required
           className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
           placeholder="Ex: Jl. Raya Ubud No.35, Ubud"
         />

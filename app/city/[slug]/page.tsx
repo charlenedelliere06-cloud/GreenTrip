@@ -48,7 +48,7 @@ export default async function CityPage({ params }: CityPageProps) {
         {/* Carte */}
         <section className="mt-10">
           <h2 className="text-xl font-bold text-forest mb-4">Carte</h2>
-          <Map center={[city.lat, city.lng]} places={places} />
+          <Map center={[city.lat, city.lng]} places={places} citySlug={city.slug} />
         </section>
 
         {/* Lieux avec filtres */}

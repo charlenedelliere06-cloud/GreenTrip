@@ -1,11 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { ContributePlaceForm } from "@/components/ContributePlaceForm";
 
-export default function ContributePage() {
+function ContributeContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -38,5 +39,23 @@ export default function ContributePage() {
       </p>
       <ContributePlaceForm userId={user.id} />
     </div>
+  );
+}
+
+export default function ContributePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="max-w-3xl mx-auto px-4 py-10">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-beige rounded-lg w-1/3" />
+            <div className="h-4 bg-beige rounded-lg w-2/3" />
+            <div className="h-64 bg-beige rounded-2xl" />
+          </div>
+        </div>
+      }
+    >
+      <ContributeContent />
+    </Suspense>
   );
 }

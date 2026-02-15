@@ -11,4 +11,17 @@
   --color-forest-light: #3D6A3D;
 
   --font-sans: "Inter", "system-ui", "sans-serif";
+
+  --animate-fade-in: fade-in 0.3s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
