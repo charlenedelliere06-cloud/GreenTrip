@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { getCityBySlug, getPlacesByCity, getTipsByCity } from "@/lib/mock-data";
 import { VeganScore } from "@/components/VeganScore";
-import { PlaceCard } from "@/components/PlaceCard";
 import { TipCard } from "@/components/TipCard";
 import { Map } from "@/components/Map";
+import { CityPlacesSection } from "@/components/CityPlacesSection";
 
 interface CityPageProps {
   params: Promise<{ slug: string }>;
@@ -51,17 +51,8 @@ export default async function CityPage({ params }: CityPageProps) {
           <Map center={[city.lat, city.lng]} places={places} />
         </section>
 
-        {/* Lieux */}
-        <section className="mt-10">
-          <h2 className="text-xl font-bold text-forest mb-4">
-            Lieux ({places.length})
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {places.map((place) => (
-              <PlaceCard key={place.id} place={place} />
-            ))}
-          </div>
-        </section>
+        {/* Lieux avec filtres */}
+        <CityPlacesSection places={places} />
 
         {/* Tips */}
         <section className="mt-10">

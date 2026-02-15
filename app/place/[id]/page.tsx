@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getPlaceById, cities } from "@/lib/mock-data";
+import { PhotoGallery } from "@/components/PhotoGallery";
 
 const typeLabels: Record<string, string> = {
   restaurant: "Restaurant",
@@ -63,6 +64,11 @@ export default async function PlacePage({ params }: PlacePageProps) {
           {place.description}
         </p>
 
+        {/* Photos */}
+        <div className="mt-6">
+          <PhotoGallery photos={place.photos} placeName={place.name} />
+        </div>
+
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mt-4">
           {place.tags.map((tag) => (
@@ -76,7 +82,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 mt-6 pt-6 border-t border-beige-dark">
+        <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-beige-dark">
           <a
             href={place.google_maps_url}
             target="_blank"

@@ -40,19 +40,8 @@ export const cities: City[] = [
 ];
 
 export const places: Place[] = [
-  // Bali
-  {
-    id: "p1",
-    city_id: "1",
-    name: "The Seeds of Life",
-    type: "restaurant",
-    address: "Jl. Goutama Sel., Ubud",
-    lat: -8.5069,
-    lng: 115.2625,
-    description: "Raw vegan café avec des jus pressés, smoothie bowls et plats crus créatifs.",
-    google_maps_url: "https://maps.google.com/?q=The+Seeds+of+Life+Ubud",
-    tags: ["raw", "vegan", "jus", "smoothie bowls"],
-  },
+  // ===== BALI =====
+  // Supermarchés & Épiceries
   {
     id: "p2",
     city_id: "1",
@@ -64,6 +53,54 @@ export const places: Place[] = [
     description: "Épicerie bio et healthy avec un large choix de produits vegan, locaux et importés.",
     google_maps_url: "https://maps.google.com/?q=Bali+Buda+Ubud",
     tags: ["bio", "épicerie", "vegan", "local"],
+    photos: [
+      "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&h=400&fit=crop",
+    ],
+  },
+  {
+    id: "p10",
+    city_id: "1",
+    name: "Alive Wholefoods",
+    type: "store",
+    address: "Jl. Gautama Sel. No.2, Ubud",
+    lat: -8.5080,
+    lng: 115.2640,
+    description: "Magasin spécialisé en produits complets et bio. Grand rayon vrac, super foods et alternatives végétales.",
+    google_maps_url: "https://maps.google.com/?q=Alive+Wholefoods+Ubud",
+    tags: ["bio", "vrac", "super foods", "vegan"],
+    photos: [
+      "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=600&h=400&fit=crop",
+    ],
+  },
+  {
+    id: "p11",
+    city_id: "1",
+    name: "Coco Supermarket",
+    type: "supermarket",
+    address: "Jl. Raya Ubud No.35, Ubud",
+    lat: -8.5040,
+    lng: 115.2600,
+    description: "Grand supermarché avec un rayon bio et vegan bien fourni. Idéal pour les courses du quotidien avec des produits importés.",
+    google_maps_url: "https://maps.google.com/?q=Coco+Supermarket+Ubud",
+    tags: ["supermarché", "vegan", "importé", "quotidien"],
+    photos: [],
+  },
+  // Restaurants & Cafés
+  {
+    id: "p1",
+    city_id: "1",
+    name: "The Seeds of Life",
+    type: "cafe",
+    address: "Jl. Goutama Sel., Ubud",
+    lat: -8.5069,
+    lng: 115.2625,
+    description: "Raw vegan café avec des jus pressés, smoothie bowls et plats crus créatifs.",
+    google_maps_url: "https://maps.google.com/?q=The+Seeds+of+Life+Ubud",
+    tags: ["raw", "vegan", "jus", "smoothie bowls"],
+    photos: [
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&h=400&fit=crop",
+    ],
   },
   {
     id: "p3",
@@ -76,8 +113,53 @@ export const places: Place[] = [
     description: "Restaurant 100% plant-based avec une cuisine inventive et une ambiance cosy.",
     google_maps_url: "https://maps.google.com/?q=Sage+Ubud",
     tags: ["vegan", "plant-based", "cosy"],
+    photos: [],
   },
-  // Athènes
+
+  // ===== ATHÈNES =====
+  // Supermarchés & Épiceries
+  {
+    id: "p6",
+    city_id: "2",
+    name: "Green Farm Bio Shop",
+    type: "supermarket",
+    address: "Athinas 34, Athènes",
+    lat: 37.9800,
+    lng: 23.7260,
+    description: "Magasin bio avec un bon rayon vegan : fromages végétaux, laits, snacks.",
+    google_maps_url: "https://maps.google.com/?q=Green+Farm+Bio+Shop+Athens",
+    tags: ["bio", "supermarché", "vegan"],
+    photos: [
+      "https://images.unsplash.com/photo-1608686207856-001b95cf60ca?w=600&h=400&fit=crop",
+    ],
+  },
+  {
+    id: "p12",
+    city_id: "2",
+    name: "Pantopolion Bio Market",
+    type: "store",
+    address: "Ermou 78, Athènes",
+    lat: 37.9785,
+    lng: 23.7240,
+    description: "Épicerie fine bio au cœur d'Athènes. Produits grecs bio, huile d'olive, olives, alternatives végétales locales.",
+    google_maps_url: "https://maps.google.com/?q=Pantopolion+Bio+Market+Athens",
+    tags: ["bio", "épicerie fine", "grec", "local"],
+    photos: [],
+  },
+  {
+    id: "p13",
+    city_id: "2",
+    name: "AB Vasilopoulos Bio",
+    type: "supermarket",
+    address: "Stadiou 19, Athènes",
+    lat: 37.9810,
+    lng: 23.7300,
+    description: "Grande surface grecque avec un rayon bio et vegan en expansion. Bon choix de laits végétaux et substituts.",
+    google_maps_url: "https://maps.google.com/?q=AB+Vasilopoulos+Stadiou+Athens",
+    tags: ["supermarché", "bio", "laits végétaux", "chaîne"],
+    photos: [],
+  },
+  // Restaurants
   {
     id: "p4",
     city_id: "2",
@@ -89,6 +171,9 @@ export const places: Place[] = [
     description: "Street food vegan au cœur d'Athènes. Gyros, burgers et wraps 100% végétaliens.",
     google_maps_url: "https://maps.google.com/?q=Vegan+Beat+Athens",
     tags: ["street food", "vegan", "gyros", "burgers"],
+    photos: [
+      "https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&h=400&fit=crop",
+    ],
   },
   {
     id: "p5",
@@ -101,20 +186,55 @@ export const places: Place[] = [
     description: "Restaurant vegan avec des options grecques revisitées et des plats internationaux.",
     google_maps_url: "https://maps.google.com/?q=Mama+Tierra+Athens",
     tags: ["vegan", "grec", "international"],
+    photos: [],
+  },
+
+  // ===== LISBONNE =====
+  // Supermarchés & Épiceries
+  {
+    id: "p9",
+    city_id: "3",
+    name: "Celeiro",
+    type: "supermarket",
+    address: "R. 1\u00BA de Dezembro 65, Lisbonne",
+    lat: 38.7140,
+    lng: -9.1400,
+    description: "Chaîne de supermarchés bio portugaise avec un excellent rayon vegan.",
+    google_maps_url: "https://maps.google.com/?q=Celeiro+Lisbon",
+    tags: ["bio", "supermarché", "vegan", "chaîne"],
+    photos: [
+      "https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9?w=600&h=400&fit=crop",
+    ],
   },
   {
-    id: "p6",
-    city_id: "2",
-    name: "Green Farm Bio Shop",
-    type: "supermarket",
-    address: "Athinas 34, Athènes",
-    lat: 37.9800,
-    lng: 23.7260,
-    description: "Magasin bio avec un bon rayon vegan : fromages végétaux, laits, snacks.",
-    google_maps_url: "https://maps.google.com/?q=Green+Farm+Bio+Shop+Athens",
-    tags: ["bio", "supermarché", "vegan"],
+    id: "p14",
+    city_id: "3",
+    name: "Go Natural",
+    type: "store",
+    address: "R. de Santa Justa 14, Lisbonne",
+    lat: 38.7125,
+    lng: -9.1390,
+    description: "Épicerie bio et naturelle avec un bon choix de snacks vegan, protéines végétales et produits frais.",
+    google_maps_url: "https://maps.google.com/?q=Go+Natural+Lisbon",
+    tags: ["bio", "naturel", "snacks", "protéines végétales"],
+    photos: [
+      "https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8?w=600&h=400&fit=crop",
+    ],
   },
-  // Lisbonne
+  {
+    id: "p15",
+    city_id: "3",
+    name: "Aldi Bio Section",
+    type: "supermarket",
+    address: "Av. Almirante Reis 113, Lisbonne",
+    lat: 38.7200,
+    lng: -9.1350,
+    description: "Le Aldi portugais a un rayon bio surprenant avec des alternatives vegan à petit prix. Parfait pour un budget serré.",
+    google_maps_url: "https://maps.google.com/?q=Aldi+Almirante+Reis+Lisbon",
+    tags: ["budget", "bio", "vegan", "supermarché"],
+    photos: [],
+  },
+  // Restaurants
   {
     id: "p7",
     city_id: "3",
@@ -126,30 +246,22 @@ export const places: Place[] = [
     description: "Petit restaurant vegan dans l'Alfama avec un menu qui change chaque jour.",
     google_maps_url: "https://maps.google.com/?q=The+Food+Temple+Lisbon",
     tags: ["vegan", "menu du jour", "alfama"],
+    photos: [],
   },
   {
     id: "p8",
     city_id: "3",
     name: "Ao 26 - Vegan Food Project",
     type: "restaurant",
-    address: "R. Vítor Cordon 26, Lisbonne",
+    address: "R. V\u00EDtor Cordon 26, Lisbonne",
     lat: 38.7100,
     lng: -9.1420,
     description: "Un des meilleurs restos vegan de Lisbonne. Brunch, bowls et desserts incroyables.",
     google_maps_url: "https://maps.google.com/?q=Ao+26+Vegan+Food+Project+Lisbon",
     tags: ["vegan", "brunch", "bowls", "desserts"],
-  },
-  {
-    id: "p9",
-    city_id: "3",
-    name: "Celeiro",
-    type: "supermarket",
-    address: "R. 1º de Dezembro 65, Lisbonne",
-    lat: 38.7140,
-    lng: -9.1400,
-    description: "Chaîne de supermarchés bio portugaise avec un excellent rayon vegan.",
-    google_maps_url: "https://maps.google.com/?q=Celeiro+Lisbon",
-    tags: ["bio", "supermarché", "vegan", "chaîne"],
+    photos: [
+      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=400&fit=crop",
+    ],
   },
 ];
 
@@ -213,6 +325,10 @@ export function getCityBySlug(slug: string): City | undefined {
 
 export function getPlacesByCity(cityId: string): Place[] {
   return places.filter((p) => p.city_id === cityId);
+}
+
+export function getPlacesByType(cityId: string, type?: Place["type"]): Place[] {
+  return places.filter((p) => p.city_id === cityId && (!type || p.type === type));
 }
 
 export function getPlaceById(id: string): Place | undefined {

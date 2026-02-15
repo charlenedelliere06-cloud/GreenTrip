@@ -21,6 +21,9 @@ export interface Place {
   description: string;
   google_maps_url: string;
   tags: string[];
+  photos: string[];
+  added_by?: string;
+  created_at?: string;
 }
 
 export interface Tip {
@@ -32,11 +35,35 @@ export interface Tip {
   category: "tip" | "trap";
 }
 
+export interface User {
+  id: string;
+  email: string;
+  display_name: string;
+  avatar_url?: string;
+  created_at: string;
+}
+
 export interface Contribution {
   id: string;
   user_id: string;
+  user_display_name?: string;
+  type: "place" | "tip";
   city_id: string;
-  place_id?: string;
-  content: string;
+  // Champs pour les contributions de type "place"
+  place_name?: string;
+  place_type?: Place["type"];
+  place_address?: string;
+  place_description?: string;
+  place_lat?: number;
+  place_lng?: number;
+  place_google_maps_url?: string;
+  place_tags?: string[];
+  place_photos?: string[];
+  // Champs pour les contributions de type "tip"
+  tip_title?: string;
+  tip_content?: string;
+  tip_category?: "tip" | "trap";
+  // Statut de modération
   status: "pending" | "approved" | "rejected";
+  created_at: string;
 }
