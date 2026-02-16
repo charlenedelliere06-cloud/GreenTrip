@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Validation basique
-    if (!body.city_id || !body.place_name || !body.place_type) {
+    if ((!body.city_id && !body.city_name) || !body.place_name || !body.place_type) {
       return NextResponse.json(
         { error: "Champs obligatoires manquants" },
         { status: 400 }

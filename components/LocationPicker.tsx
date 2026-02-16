@@ -2,14 +2,47 @@
 
 import { useEffect, useState, useCallback } from "react";
 
+export interface ResolvedAddress {
+  city: string;
+  country: string;
+  address: string;
+}
+
 interface LocationPickerProps {
   lat: number | null;
   lng: number | null;
   onLocationChange: (lat: number, lng: number) => void;
+  onAddressResolved?: (data: ResolvedAddress) => void;
   center?: [number, number];
 }
 
-export function LocationPicker({ lat, lng, onLocationChange, center }: LocationPickerProps) {
+async function reverseGeocode(lat: number, lng: number): Promise<ResolvedAddress | null> {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=fr`,
+      { headers: { "User-Agent": "GreenTrip/1.0" } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const addr = data.address || {};
+
+    const city =
+      addr.city || addr.town || addr.village || addr.municipality || addr.hamlet || "";
+    const country = addr.country || "";
+    const road = addr.road || addr.pedestrian || addr.footway || "";
+    const houseNumber = addr.house_number || "";
+    const suburb = addr.suburb || addr.neighbourhood || "";
+
+    const parts = [houseNumber, road, suburb].filter(Boolean);
+    const address = parts.join(", ");
+
+    return { city, country, address };
+  } catch {
+    return null;
+  }
+}
+
+export function LocationPicker({ lat, lng, onLocationChange, onAddressResolved, center }: LocationPickerProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -29,12 +62,13 @@ export function LocationPicker({ lat, lng, onLocationChange, center }: LocationP
       lat={lat}
       lng={lng}
       onLocationChange={onLocationChange}
+      onAddressResolved={onAddressResolved}
       center={center}
     />
   );
 }
 
-function LocationPickerInner({ lat, lng, onLocationChange, center }: LocationPickerProps) {
+function LocationPickerInner({ lat, lng, onLocationChange, onAddressResolved, center }: LocationPickerProps) {
   const {
     MapContainer,
     TileLayer,
@@ -45,6 +79,7 @@ function LocationPickerInner({ lat, lng, onLocationChange, center }: LocationPic
   const L = require("leaflet");
 
   const [locating, setLocating] = useState(false);
+  const [resolving, setResolving] = useState(false);
 
   useEffect(() => {
     delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -79,10 +114,23 @@ function LocationPickerInner({ lat, lng, onLocationChange, center }: LocationPic
   const defaultCenter: [number, number] = center || [48.8566, 2.3522];
   const mapCenter: [number, number] = lat && lng ? [lat, lng] : defaultCenter;
 
+  const handleNewPosition = useCallback(async (newLat: number, newLng: number) => {
+    onLocationChange(newLat, newLng);
+
+    if (onAddressResolved) {
+      setResolving(true);
+      const result = await reverseGeocode(newLat, newLng);
+      if (result) {
+        onAddressResolved(result);
+      }
+      setResolving(false);
+    }
+  }, [onLocationChange, onAddressResolved]);
+
   function ClickHandler() {
     useMapEvents({
       click(e: any) {
-        onLocationChange(e.latlng.lat, e.latlng.lng);
+        handleNewPosition(e.latlng.lat, e.latlng.lng);
       },
     });
     return null;
@@ -101,7 +149,7 @@ function LocationPickerInner({ lat, lng, onLocationChange, center }: LocationPic
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        onLocationChange(pos.coords.latitude, pos.coords.longitude);
+        handleNewPosition(pos.coords.latitude, pos.coords.longitude);
         setLocating(false);
       },
       () => {
@@ -162,7 +210,7 @@ function LocationPickerInner({ lat, lng, onLocationChange, center }: LocationPic
                 Clique sur la carte pour placer le lieu
               </p>
               <p className="text-xs text-forest/40 mt-1">
-                ou utilise le bouton "Ma position" ci-dessus
+                ou utilise le bouton &quot;Ma position&quot; ci-dessus
               </p>
             </div>
           </div>
@@ -170,9 +218,17 @@ function LocationPickerInner({ lat, lng, onLocationChange, center }: LocationPic
       </div>
 
       {lat && lng && (
-        <p className="text-xs text-forest/50">
-          Position : {lat.toFixed(5)}, {lng.toFixed(5)}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-xs text-forest/50">
+            Position : {lat.toFixed(5)}, {lng.toFixed(5)}
+          </p>
+          {resolving && (
+            <span className="text-xs text-sage flex items-center gap-1">
+              <span className="w-3 h-3 border-2 border-sage/30 border-t-sage rounded-full animate-spin" />
+              Recherche de l&apos;adresse...
+            </span>
+          )}
+        </div>
       )}
     </div>
   );

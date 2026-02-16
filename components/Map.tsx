@@ -13,8 +13,6 @@ interface MapProps {
 const typeConfig: Record<string, { color: string; emoji: string; label: string }> = {
   supermarket: { color: "#f59e0b", emoji: "\uD83D\uDED2", label: "Supermarché" },
   store: { color: "#10b981", emoji: "\uD83C\uDF3F", label: "Épicerie bio" },
-  restaurant: { color: "#9CAF88", emoji: "\uD83C\uDF7D\uFE0F", label: "Restaurant" },
-  cafe: { color: "#f97316", emoji: "\u2615", label: "Café" },
 };
 
 export function Map({ center, places, citySlug }: MapProps) {

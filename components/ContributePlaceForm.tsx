@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { cities } from "@/lib/mock-data";
 import { PhotoUpload } from "./PhotoUpload";
-import { LocationPicker } from "./LocationPicker";
+import { LocationPicker, ResolvedAddress } from "./LocationPicker";
 
 interface ContributePlaceFormProps {
   userId: string;
@@ -13,8 +13,6 @@ interface ContributePlaceFormProps {
 const placeTypes = [
   { value: "supermarket", label: "Supermarché", icon: "\uD83D\uDED2" },
   { value: "store", label: "Épicerie bio", icon: "\uD83C\uDF3F" },
-  { value: "restaurant", label: "Restaurant", icon: "\uD83C\uDF7D\uFE0F" },
-  { value: "cafe", label: "Café", icon: "\u2615" },
 ];
 
 export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
@@ -22,7 +20,13 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
   const initialLat = searchParams.get("lat") ? parseFloat(searchParams.get("lat")!) : null;
   const initialLng = searchParams.get("lng") ? parseFloat(searchParams.get("lng")!) : null;
 
+  const [citySearch, setCitySearch] = useState("");
   const [cityId, setCityId] = useState("");
+  const [country, setCountry] = useState("");
+  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  const cityInputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+
   const [name, setName] = useState("");
   const [type, setType] = useState("supermarket");
   const [address, setAddress] = useState("");
@@ -37,18 +41,76 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
   const [error, setError] = useState("");
 
   const selectedCity = cities.find((c) => c.id === cityId);
+  const isNewCity = citySearch.trim() !== "" && !selectedCity;
+
+  const filteredCities = citySearch.trim()
+    ? cities.filter(
+        (c) =>
+          c.name.toLowerCase().includes(citySearch.toLowerCase()) ||
+          c.country.toLowerCase().includes(citySearch.toLowerCase())
+      )
+    : cities;
+
+  // Fermer les suggestions quand on clique ailleurs
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node) &&
+        cityInputRef.current && !cityInputRef.current.contains(e.target as Node)
+      ) {
+        setShowCitySuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelectCity = (city: typeof cities[0]) => {
+    setCityId(city.id);
+    setCitySearch(city.name);
+    setCountry(city.country);
+    setShowCitySuggestions(false);
+  };
+
+  const [autoFilled, setAutoFilled] = useState(false);
 
   const handleLocationChange = (newLat: number, newLng: number) => {
     setLat(newLat);
     setLng(newLng);
   };
 
+  const handleAddressResolved = (data: ResolvedAddress) => {
+    if (data.city) {
+      // Vérifier si la ville correspond à une ville existante
+      const match = cities.find(
+        (c) => c.name.toLowerCase() === data.city.toLowerCase()
+      );
+      if (match) {
+        setCityId(match.id);
+        setCitySearch(match.name);
+        setCountry(match.country);
+      } else {
+        setCityId("");
+        setCitySearch(data.city);
+        setCountry(data.country);
+      }
+    }
+    if (data.address) {
+      setAddress(data.address);
+    }
+    setAutoFilled(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    if (!cityId) {
-      setError("Sélectionne une ville.");
+    if (!citySearch.trim()) {
+      setError("Indique une ville.");
+      return;
+    }
+    if (!country.trim()) {
+      setError("Indique le pays.");
       return;
     }
 
@@ -65,7 +127,10 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
       const body = {
         user_id: userId,
         type: "place" as const,
-        city_id: cityId,
+        city_id: cityId || undefined,
+        city_name: citySearch.trim(),
+        city_country: country.trim(),
+        is_new_city: isNewCity,
         place_name: name,
         place_type: type,
         place_address: address,
@@ -94,27 +159,32 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
     }
   };
 
+  const resetForm = () => {
+    setSuccess(false);
+    setName("");
+    setAddress("");
+    setDescription("");
+    setLat(null);
+    setLng(null);
+    setGoogleMapsUrl("");
+    setTagsInput("");
+    setPhotos([]);
+    setCityId("");
+    setCitySearch("");
+    setCountry("");
+    setAutoFilled(false);
+  };
+
   if (success) {
     return (
       <div className="bg-white rounded-2xl p-8 shadow-sm text-center mt-6">
         <div className="text-4xl mb-4">🎉</div>
         <h2 className="text-xl font-bold text-forest">Merci pour ta contribution !</h2>
         <p className="text-forest/60 mt-2">
-          Ton lieu sera vérifié par notre équipe avant d'être publié.
+          Ton lieu sera vérifié par notre équipe avant d&apos;être publié.
         </p>
         <button
-          onClick={() => {
-            setSuccess(false);
-            setName("");
-            setAddress("");
-            setDescription("");
-            setLat(null);
-            setLng(null);
-            setGoogleMapsUrl("");
-            setTagsInput("");
-            setPhotos([]);
-            setCityId("");
-          }}
+          onClick={resetForm}
           className="mt-6 bg-sage text-white px-6 py-2.5 rounded-xl font-medium hover:bg-sage-dark transition-colors"
         >
           Ajouter un autre lieu
@@ -124,176 +194,302 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-sm mt-6 space-y-5">
-      {/* Ville */}
-      <div>
-        <label className="block text-sm font-medium text-forest mb-1">
-          Ville *
-        </label>
-        <select
-          value={cityId}
-          onChange={(e) => setCityId(e.target.value)}
-          required
-          className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
-        >
-          <option value="">Sélectionner une ville</option>
-          {cities.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name} ({c.country})
-            </option>
-          ))}
-        </select>
-      </div>
+    <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-sm mt-6">
+      {/* === SECTION 1 : Où ? === */}
+      <fieldset className="space-y-4">
+        <legend className="text-base font-bold text-forest flex items-center gap-2 mb-3">
+          <span className="w-6 h-6 rounded-full bg-sage text-white text-xs flex items-center justify-center font-bold">1</span>
+          Où se trouve le lieu ?
+        </legend>
 
-      {/* Nom */}
-      <div>
-        <label className="block text-sm font-medium text-forest mb-1">
-          Nom du lieu *
-        </label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
-          placeholder="Ex: Bio Market Ubud"
-        />
-      </div>
-
-      {/* Type */}
-      <div>
-        <label className="block text-sm font-medium text-forest mb-2">
-          Type de lieu *
-        </label>
-        <div className="grid grid-cols-2 gap-2">
-          {placeTypes.map((pt) => (
-            <button
-              key={pt.value}
-              type="button"
-              onClick={() => setType(pt.value)}
-              className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all ${
-                type === pt.value
-                  ? "bg-sage text-white border-sage"
-                  : "bg-offwhite text-forest/70 border-beige-dark hover:border-sage/50"
-              }`}
-            >
-              <span>{pt.icon}</span>
-              <span>{pt.label}</span>
-            </button>
-          ))}
+        {/* Localisation carte — en premier */}
+        <div>
+          <p className="text-sm text-forest/60 mb-2">
+            Utilise ta position ou clique sur la carte — la ville, le pays et l&apos;adresse se rempliront automatiquement.
+          </p>
+          <LocationPicker
+            lat={lat}
+            lng={lng}
+            onLocationChange={handleLocationChange}
+            onAddressResolved={handleAddressResolved}
+            center={selectedCity ? [selectedCity.lat, selectedCity.lng] : undefined}
+          />
         </div>
-      </div>
 
-      {/* Localisation sur la carte */}
-      <div>
-        <label className="block text-sm font-medium text-forest mb-2">
-          Localisation
-        </label>
-        <p className="text-xs text-forest/50 mb-2">
-          Place le lieu sur la carte avec ta position GPS ou en cliquant directement dessus.
-        </p>
-        <LocationPicker
-          lat={lat}
-          lng={lng}
-          onLocationChange={handleLocationChange}
-          center={selectedCity ? [selectedCity.lat, selectedCity.lng] : undefined}
-        />
-      </div>
+        {/* Séparateur "ou" */}
+        <div className="flex items-center gap-3">
+          <div className="flex-1 h-px bg-beige-dark" />
+          <span className="text-xs text-forest/40 font-medium">ou remplis manuellement</span>
+          <div className="flex-1 h-px bg-beige-dark" />
+        </div>
 
-      {/* Adresse */}
-      <div>
-        <label className="block text-sm font-medium text-forest mb-1">
-          Adresse
-          <span className="text-forest/40 font-normal ml-1">(optionnel si placé sur la carte)</span>
-        </label>
-        <input
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
-          placeholder="Ex: Jl. Raya Ubud No.35, Ubud"
-        />
-      </div>
+        {/* Ville + Pays côte à côte */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Ville */}
+          <div className="relative">
+            <label className="block text-sm font-medium text-forest mb-1">
+              Ville
+            </label>
+            <input
+              ref={cityInputRef}
+              type="text"
+              value={citySearch}
+              onChange={(e) => {
+                setCitySearch(e.target.value);
+                setCityId("");
+                setCountry("");
+                setAutoFilled(false);
+                setShowCitySuggestions(true);
+              }}
+              onFocus={() => setShowCitySuggestions(true)}
+              className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
+                autoFilled && citySearch ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
+              }`}
+              placeholder="Ex: Bangkok, Berlin..."
+              required
+            />
 
-      {/* Description */}
-      <div>
-        <label className="block text-sm font-medium text-forest mb-1">
-          Description *
-        </label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-          maxLength={500}
-          rows={3}
-          className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage resize-none"
-          placeholder="Décris ce lieu : ce qu'on y trouve, pourquoi c'est bien pour les vegans..."
-        />
-        <p className="text-xs text-forest/40 text-right mt-1">
-          {description.length}/500
-        </p>
-      </div>
+            {/* Suggestions dropdown */}
+            {showCitySuggestions && (
+              <div
+                ref={suggestionsRef}
+                className="absolute z-20 left-0 right-0 mt-1 bg-white border border-beige-dark rounded-xl shadow-lg overflow-hidden max-h-52 overflow-y-auto"
+              >
+                {filteredCities.length > 0 && (
+                  <div>
+                    {filteredCities.map((c) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => handleSelectCity(c)}
+                        className="w-full text-left px-4 py-2.5 hover:bg-beige/50 transition-colors flex items-center justify-between"
+                      >
+                        <span className="text-forest font-medium">{c.name}</span>
+                        <span className="text-forest/40 text-sm">{c.country}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {citySearch.trim() &&
+                  !filteredCities.some(
+                    (c) => c.name.toLowerCase() === citySearch.toLowerCase()
+                  ) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCityId("");
+                        setCountry("");
+                        setShowCitySuggestions(false);
+                      }}
+                      className="w-full text-left px-4 py-2.5 border-t border-beige-dark bg-sage/5 flex items-center gap-2 text-sage-dark font-medium hover:bg-sage/10 transition-colors"
+                    >
+                      <span className="text-lg leading-none">+</span>
+                      Ajouter &quot;{citySearch.trim()}&quot;
+                    </button>
+                  )}
+              </div>
+            )}
 
-      {/* Google Maps URL */}
-      <div>
-        <label className="block text-sm font-medium text-forest mb-1">
-          Lien Google Maps
-          <span className="text-forest/40 font-normal ml-1">(optionnel)</span>
-        </label>
-        <input
-          type="url"
-          value={googleMapsUrl}
-          onChange={(e) => setGoogleMapsUrl(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
-          placeholder="https://maps.google.com/..."
-        />
-      </div>
+            {selectedCity && (
+              <p className="text-xs text-sage mt-1 flex items-center gap-1">
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                Ville existante
+              </p>
+            )}
+            {isNewCity && !showCitySuggestions && (
+              <p className="text-xs text-forest/40 mt-1">
+                Nouvelle ville — sera ajoutée après vérification
+              </p>
+            )}
+          </div>
 
-      {/* Tags */}
-      <div>
-        <label className="block text-sm font-medium text-forest mb-1">
-          Tags
-          <span className="text-forest/40 font-normal ml-1">(séparés par des virgules)</span>
-        </label>
-        <input
-          type="text"
-          value={tagsInput}
-          onChange={(e) => setTagsInput(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
-          placeholder="bio, vegan, vrac, local"
-        />
-      </div>
+          {/* Pays — toujours visible */}
+          <div>
+            <label className="block text-sm font-medium text-forest mb-1">
+              Pays
+            </label>
+            <input
+              type="text"
+              value={country}
+              onChange={(e) => { setCountry(e.target.value); setAutoFilled(false); }}
+              className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
+                selectedCity ? "border-beige-dark bg-beige/50" : autoFilled && country ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
+              }`}
+              placeholder="Ex: Thaïlande, Allemagne..."
+              required
+              readOnly={!!selectedCity}
+            />
+          </div>
+        </div>
 
-      {/* Photos */}
-      <div>
-        <label className="block text-sm font-medium text-forest mb-2">
-          Photos
-          <span className="text-forest/40 font-normal ml-1">(max 10)</span>
-        </label>
-        <PhotoUpload
-          photos={photos}
-          onPhotosChange={setPhotos}
-          maxPhotos={10}
-        />
-      </div>
+        {/* Adresse */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-1">
+            Adresse
+            <span className="text-forest/40 font-normal ml-1">(optionnel)</span>
+          </label>
+          <input
+            type="text"
+            value={address}
+            onChange={(e) => { setAddress(e.target.value); setAutoFilled(false); }}
+            className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
+              autoFilled && address ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
+            }`}
+            placeholder="Ex: 42 Rue du Temple, quartier Marais"
+          />
+        </div>
+      </fieldset>
+
+      <hr className="my-6 border-beige-dark" />
+
+      {/* === SECTION 2 : Quoi ? === */}
+      <fieldset className="space-y-4">
+        <legend className="text-base font-bold text-forest flex items-center gap-2 mb-3">
+          <span className="w-6 h-6 rounded-full bg-sage text-white text-xs flex items-center justify-center font-bold">2</span>
+          Quel est ce lieu ?
+        </legend>
+
+        {/* Nom */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-1">
+            Nom du lieu
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
+            placeholder="Ex: Whole Foods Market, Veganz..."
+          />
+        </div>
+
+        {/* Type */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-2">
+            Type de lieu
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {placeTypes.map((pt) => (
+              <button
+                key={pt.value}
+                type="button"
+                onClick={() => setType(pt.value)}
+                className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all ${
+                  type === pt.value
+                    ? "bg-sage text-white border-sage shadow-sm"
+                    : "bg-offwhite text-forest/70 border-beige-dark hover:border-sage/50"
+                }`}
+              >
+                <span>{pt.icon}</span>
+                <span>{pt.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Description */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-1">
+            Description
+          </label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            maxLength={500}
+            rows={3}
+            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage resize-none"
+            placeholder="Qu'est-ce qu'on y trouve ? Pourquoi c'est bien pour les vegans ?"
+          />
+          <p className="text-xs text-forest/40 text-right mt-1">
+            {description.length}/500
+          </p>
+        </div>
+      </fieldset>
+
+      <hr className="my-6 border-beige-dark" />
+
+      {/* === SECTION 3 : Compléments === */}
+      <fieldset className="space-y-4">
+        <legend className="text-base font-bold text-forest flex items-center gap-2 mb-3">
+          <span className="w-6 h-6 rounded-full bg-sage text-white text-xs flex items-center justify-center font-bold">3</span>
+          Pour aller plus loin
+          <span className="text-xs font-normal text-forest/40 ml-1">(optionnel)</span>
+        </legend>
+
+        {/* Photos */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-2">
+            Photos
+            <span className="text-forest/40 font-normal ml-1">(max 10)</span>
+          </label>
+          <PhotoUpload
+            photos={photos}
+            onPhotosChange={setPhotos}
+            maxPhotos={10}
+          />
+        </div>
+
+        {/* Google Maps URL */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-1">
+            Lien Google Maps
+          </label>
+          <input
+            type="url"
+            value={googleMapsUrl}
+            onChange={(e) => setGoogleMapsUrl(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
+            placeholder="https://maps.google.com/..."
+          />
+        </div>
+
+        {/* Tags */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-1">
+            Tags
+            <span className="text-forest/40 font-normal ml-1">(séparés par des virgules)</span>
+          </label>
+          <input
+            type="text"
+            value={tagsInput}
+            onChange={(e) => setTagsInput(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
+            placeholder="bio, vegan, vrac, local..."
+          />
+        </div>
+      </fieldset>
 
       {/* Erreur */}
       {error && (
-        <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">
+        <div className="mt-5 text-sm text-red-600 bg-red-50 rounded-xl px-4 py-3 flex items-center gap-2">
+          <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
           {error}
-        </p>
+        </div>
       )}
 
       {/* Submit */}
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-sage text-white py-3 rounded-xl font-medium hover:bg-sage-dark transition-colors disabled:opacity-50"
+        className="w-full mt-6 bg-sage text-white py-3.5 rounded-xl font-semibold hover:bg-sage-dark transition-colors disabled:opacity-50 text-base"
       >
-        {loading ? "Envoi en cours..." : "Soumettre le lieu"}
+        {loading ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            Envoi en cours...
+          </span>
+        ) : (
+          "Soumettre le lieu"
+        )}
       </button>
 
-      <p className="text-xs text-forest/40 text-center">
+      <p className="text-xs text-forest/40 text-center mt-3">
         Ta contribution sera vérifiée avant publication.
       </p>
     </form>

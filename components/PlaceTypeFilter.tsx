@@ -6,8 +6,6 @@ const typeConfig = [
   { value: "all", label: "Tous", icon: "\uD83D\uDCCD" },
   { value: "supermarket", label: "Supermarchés", icon: "\uD83D\uDED2" },
   { value: "store", label: "Épiceries bio", icon: "\uD83C\uDF3F" },
-  { value: "restaurant", label: "Restaurants", icon: "\uD83C\uDF7D\uFE0F" },
-  { value: "cafe", label: "Cafés", icon: "\u2615" },
 ];
 
 interface PlaceTypeFilterProps {

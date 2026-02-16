@@ -2,16 +2,12 @@ import Link from "next/link";
 import { Place } from "@/lib/types";
 
 const typeLabels: Record<Place["type"], string> = {
-  restaurant: "Restaurant",
   supermarket: "Supermarché",
-  cafe: "Café",
-  store: "Épicerie",
+  store: "Épicerie bio",
 };
 
 const typeColors: Record<Place["type"], string> = {
-  restaurant: "bg-sage/10 text-sage-dark",
   supermarket: "bg-amber-50 text-amber-700",
-  cafe: "bg-orange-50 text-orange-700",
   store: "bg-emerald-50 text-emerald-700",
 };
 
