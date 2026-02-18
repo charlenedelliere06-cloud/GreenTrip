@@ -1,13 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { tips } from "@/lib/mock-data";
+import { createSupabaseServer } from "@/lib/supabase-server";
 
 export async function GET(request: NextRequest) {
   const cityId = request.nextUrl.searchParams.get("city_id");
+  const supabase = await createSupabaseServer();
+
+  let query = supabase
+    .from("tips")
+    .select("*")
+    .order("created_at", { ascending: false });
 
   if (cityId) {
-    const filtered = tips.filter((t) => t.city_id === cityId);
-    return NextResponse.json(filtered);
+    query = query.eq("city_id", cityId);
   }
 
-  return NextResponse.json(tips);
+  const { data, error } = await query;
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json(data || []);
 }

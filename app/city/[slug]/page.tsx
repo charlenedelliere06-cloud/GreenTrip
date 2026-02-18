@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getCityBySlug, getPlacesByCity, getTipsByCity } from "@/lib/mock-data";
+import { getCityBySlug, getPlacesByCity, getTipsByCity } from "@/lib/supabase-queries";
 import { VeganScore } from "@/components/VeganScore";
 import { TipCard } from "@/components/TipCard";
 import { Map } from "@/components/Map";
@@ -11,14 +11,14 @@ interface CityPageProps {
 
 export default async function CityPage({ params }: CityPageProps) {
   const { slug } = await params;
-  const city = getCityBySlug(slug);
+  const city = await getCityBySlug(slug);
 
   if (!city) {
     notFound();
   }
 
-  const places = getPlacesByCity(city.id);
-  const tips = getTipsByCity(city.id);
+  const places = await getPlacesByCity(city.id);
+  const tips = await getTipsByCity(city.id);
 
   return (
     <div>

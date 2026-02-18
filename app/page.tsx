@@ -1,8 +1,10 @@
 import { SearchBar } from "@/components/SearchBar";
 import { CityCard } from "@/components/CityCard";
-import { cities } from "@/lib/mock-data";
+import { getCities } from "@/lib/supabase-queries";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const cities = await getCities();
+
   return (
     <div>
       {/* Hero */}
@@ -13,7 +15,7 @@ export default function HomePage() {
             partout dans le monde
           </h1>
           <p className="mt-4 text-forest/60 text-lg max-w-xl mx-auto">
-            Restaurants, supermarchés, tips et pièges à éviter — tout ce qu'il
+            Restaurants, supermarchés, tips et pièges à éviter — tout ce qu&apos;il
             faut pour voyager plant-based sereinement.
           </p>
           <div className="mt-8">
@@ -45,7 +47,7 @@ export default function HomePage() {
               <div className="text-3xl mb-3">🔍</div>
               <h3 className="font-semibold text-forest">Cherche ta ville</h3>
               <p className="text-sm text-forest/60 mt-2">
-                Tape le nom d'une destination pour découvrir son score vegan et ses
+                Tape le nom d&apos;une destination pour découvrir son score vegan et ses
                 meilleures adresses.
               </p>
             </div>

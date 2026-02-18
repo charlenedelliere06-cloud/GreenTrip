@@ -1,9 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { createContribution, getContributions } from "@/lib/supabase-queries";
 
-// Stockage temporaire en mémoire (sera remplacé par Supabase)
-const contributions: Record<string, unknown>[] = [];
-
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json();
 
@@ -15,18 +13,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const contribution = {
-      id: `c-${Date.now()}`,
-      ...body,
-      status: "pending",
-      created_at: new Date().toISOString(),
-    };
-
-    contributions.push(contribution);
-    console.log("Nouvelle contribution reçue:", contribution);
+    const contribution = await createContribution(body);
 
     return NextResponse.json({ success: true, contribution });
-  } catch {
+  } catch (err) {
+    console.error("Erreur POST /api/contributions:", err);
     return NextResponse.json(
       { error: "Erreur serveur" },
       { status: 500 }
@@ -35,5 +26,14 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json(contributions);
+  try {
+    const contributions = await getContributions();
+    return NextResponse.json(contributions);
+  } catch (err) {
+    console.error("Erreur GET /api/contributions:", err);
+    return NextResponse.json(
+      { error: "Erreur serveur" },
+      { status: 500 }
+    );
+  }
 }

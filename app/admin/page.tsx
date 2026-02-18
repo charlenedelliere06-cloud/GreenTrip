@@ -1,19 +1,44 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Contribution } from "@/lib/types";
-import { cities } from "@/lib/mock-data";
+import { City } from "@/lib/types";
+import { getCitiesClient } from "@/lib/supabase-client-queries";
+
+interface ContributionRow {
+  id: string;
+  user_id: string;
+  place_name: string;
+  place_type: string;
+  city_id: string | null;
+  city_name: string | null;
+  city_country: string | null;
+  is_new_city: boolean;
+  address: string;
+  lat: number | null;
+  lng: number | null;
+  description: string;
+  google_maps_url: string;
+  tags: string[];
+  photos: string[];
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+}
 
 export default function AdminPage() {
-  const [contributions, setContributions] = useState<Contribution[]>([]);
+  const [contributions, setContributions] = useState<ContributionRow[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("pending");
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/contributions")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) setContributions(data);
+    Promise.all([
+      fetch("/api/contributions").then((res) => res.json()),
+      getCitiesClient(),
+    ])
+      .then(([contribs, citiesData]) => {
+        if (Array.isArray(contribs)) setContributions(contribs);
+        setCities(citiesData);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -23,15 +48,39 @@ export default function AdminPage() {
     ? contributions
     : contributions.filter((c) => c.status === filter);
 
-  const getCityName = (cityId: string) => {
-    return cities.find((c) => c.id === cityId)?.name || cityId;
+  const getCityName = (cityId: string | null, cityName: string | null) => {
+    if (cityId) {
+      return cities.find((c) => c.id === cityId)?.name || cityName || cityId;
+    }
+    return cityName || "Ville inconnue";
+  };
+
+  const handleModerate = async (id: string, status: "approved" | "rejected") => {
+    setActionLoading(id);
+    try {
+      const res = await fetch(`/api/contributions/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+
+      if (res.ok) {
+        setContributions((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, status } : item
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Erreur modération:", err);
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   const typeLabels: Record<string, string> = {
     supermarket: "🛒 Supermarché",
     store: "🌿 Épicerie bio",
-    restaurant: "🍽️ Restaurant",
-    cafe: "☕ Café",
   };
 
   const statusColors: Record<string, string> = {
@@ -91,31 +140,36 @@ export default function AdminPage() {
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusColors[c.status]}`}>
                       {c.status}
                     </span>
+                    {c.is_new_city && (
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">
+                        Nouvelle ville
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-forest/60 mt-1">
-                    {typeLabels[c.place_type || ""] || c.place_type} · {getCityName(c.city_id)} · {c.place_address}
+                    {typeLabels[c.place_type || ""] || c.place_type} · {getCityName(c.city_id, c.city_name)} · {c.address}
                   </p>
                   <p className="text-sm text-forest/80 mt-2">
-                    {c.place_description}
+                    {c.description}
                   </p>
-                  {c.place_tags && c.place_tags.length > 0 && (
+                  {c.tags && c.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-2">
-                      {c.place_tags.map((tag) => (
+                      {c.tags.map((tag) => (
                         <span key={tag} className="text-xs bg-beige text-forest/70 px-2 py-0.5 rounded-full">
                           {tag}
                         </span>
                       ))}
                     </div>
                   )}
-                  {c.place_photos && c.place_photos.length > 0 && (
+                  {c.photos && c.photos.length > 0 && (
                     <div className="flex gap-2 mt-3">
-                      {c.place_photos.map((photo, i) => (
+                      {c.photos.map((photo, i) => (
                         <img key={i} src={photo} alt="" className="w-16 h-16 rounded-lg object-cover" />
                       ))}
                     </div>
                   )}
                   <p className="text-xs text-forest/40 mt-2">
-                    Par {c.user_display_name || c.user_id} · {c.created_at && new Date(c.created_at).toLocaleDateString("fr-FR")}
+                    {c.created_at && new Date(c.created_at).toLocaleDateString("fr-FR")}
                   </p>
                 </div>
 
@@ -123,28 +177,18 @@ export default function AdminPage() {
                 {c.status === "pending" && (
                   <div className="flex flex-col gap-2 shrink-0">
                     <button
-                      onClick={() => {
-                        setContributions((prev) =>
-                          prev.map((item) =>
-                            item.id === c.id ? { ...item, status: "approved" } : item
-                          )
-                        );
-                      }}
-                      className="bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-600 transition-colors"
+                      onClick={() => handleModerate(c.id, "approved")}
+                      disabled={actionLoading === c.id}
+                      className="bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-600 transition-colors disabled:opacity-50"
                     >
-                      ✓ Approuver
+                      {actionLoading === c.id ? "..." : "✓ Approuver"}
                     </button>
                     <button
-                      onClick={() => {
-                        setContributions((prev) =>
-                          prev.map((item) =>
-                            item.id === c.id ? { ...item, status: "rejected" } : item
-                          )
-                        );
-                      }}
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600 transition-colors"
+                      onClick={() => handleModerate(c.id, "rejected")}
+                      disabled={actionLoading === c.id}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600 transition-colors disabled:opacity-50"
                     >
-                      ✕ Rejeter
+                      {actionLoading === c.id ? "..." : "✕ Rejeter"}
                     </button>
                   </div>
                 )}

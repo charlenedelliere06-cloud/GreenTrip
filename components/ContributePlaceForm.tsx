@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { cities } from "@/lib/mock-data";
+import { City } from "@/lib/types";
+import { getCitiesClient } from "@/lib/supabase-client-queries";
 import { PhotoUpload } from "./PhotoUpload";
 import { LocationPicker, ResolvedAddress } from "./LocationPicker";
 
@@ -19,6 +20,12 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
   const searchParams = useSearchParams();
   const initialLat = searchParams.get("lat") ? parseFloat(searchParams.get("lat")!) : null;
   const initialLng = searchParams.get("lng") ? parseFloat(searchParams.get("lng")!) : null;
+
+  const [cities, setCities] = useState<City[]>([]);
+
+  useEffect(() => {
+    getCitiesClient().then(setCities);
+  }, []);
 
   const [citySearch, setCitySearch] = useState("");
   const [cityId, setCityId] = useState("");
@@ -65,7 +72,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelectCity = (city: typeof cities[0]) => {
+  const handleSelectCity = (city: City) => {
     setCityId(city.id);
     setCitySearch(city.name);
     setCountry(city.country);

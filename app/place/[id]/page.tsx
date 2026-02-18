@@ -1,12 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getPlaceById, cities } from "@/lib/mock-data";
+import { getPlaceById, getCities } from "@/lib/supabase-queries";
 import { PhotoGallery } from "@/components/PhotoGallery";
 
 const typeLabels: Record<string, string> = {
-  restaurant: "Restaurant",
   supermarket: "Supermarché",
-  cafe: "Café",
   store: "Épicerie",
 };
 
@@ -16,12 +14,13 @@ interface PlacePageProps {
 
 export default async function PlacePage({ params }: PlacePageProps) {
   const { id } = await params;
-  const place = getPlaceById(id);
+  const place = await getPlaceById(id);
 
   if (!place) {
     notFound();
   }
 
+  const cities = await getCities();
   const city = cities.find((c) => c.id === place.city_id);
 
   return (

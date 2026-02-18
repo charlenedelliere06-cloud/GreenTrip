@@ -1,13 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { cities } from "@/lib/mock-data";
+import { City } from "@/lib/types";
+import { getCitiesClient } from "@/lib/supabase-client-queries";
 
 export function SearchBar() {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [cities, setCities] = useState<City[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    getCitiesClient().then(setCities);
+  }, []);
 
   const filtered = cities.filter(
     (c) =>
