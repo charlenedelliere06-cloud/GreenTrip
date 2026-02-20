@@ -40,7 +40,6 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
   const [description, setDescription] = useState("");
   const [lat, setLat] = useState<number | null>(initialLat);
   const [lng, setLng] = useState<number | null>(initialLng);
-  const [googleMapsUrl, setGoogleMapsUrl] = useState("");
   const [tagsInput, setTagsInput] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
@@ -144,7 +143,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
         place_description: description,
         place_lat: lat,
         place_lng: lng,
-        place_google_maps_url: googleMapsUrl || undefined,
+        place_google_maps_url: "",
         place_tags: tags,
         place_photos: photoUrls,
         status: "pending" as const,
@@ -173,7 +172,6 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
     setDescription("");
     setLat(null);
     setLng(null);
-    setGoogleMapsUrl("");
     setTagsInput("");
     setPhotos([]);
     setCityId("");
@@ -437,20 +435,6 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
             photos={photos}
             onPhotosChange={setPhotos}
             maxPhotos={10}
-          />
-        </div>
-
-        {/* Google Maps URL */}
-        <div>
-          <label className="block text-sm font-medium text-forest mb-1">
-            Lien Google Maps
-          </label>
-          <input
-            type="url"
-            value={googleMapsUrl}
-            onChange={(e) => setGoogleMapsUrl(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
-            placeholder="https://maps.google.com/..."
           />
         </div>
 
