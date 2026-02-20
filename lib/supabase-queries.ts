@@ -153,7 +153,7 @@ export async function updateContributionStatus(
   if (status === "approved" && contribution) {
     let cityId = contribution.city_id;
 
-    // Si c'est une nouvelle ville, la créer d'abord
+    // Si c'est une nouvelle ville, vérifier si elle existe déjà sinon la créer
     if (contribution.is_new_city && contribution.city_name) {
       const slug = contribution.city_name
         .toLowerCase()
@@ -162,27 +162,38 @@ export async function updateContributionStatus(
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
 
-      const { data: newCity, error: cityError } = await supabase
+      // Vérifier si la ville existe déjà
+      const { data: existingCity } = await supabase
         .from("cities")
-        .insert({
-          name: contribution.city_name,
-          country: contribution.city_country || "",
-          slug,
-          vegan_score: 3,
-          description: `Découvrez les adresses vegan à ${contribution.city_name}.`,
-          image_url: "",
-          lat: contribution.place_lat || 0,
-          lng: contribution.place_lng || 0,
-        })
-        .select()
+        .select("id")
+        .eq("slug", slug)
         .single();
 
-      if (cityError) {
-        console.error("Erreur création ville:", cityError);
-        throw cityError;
-      }
+      if (existingCity) {
+        cityId = existingCity.id;
+      } else {
+        const { data: newCity, error: cityError } = await supabase
+          .from("cities")
+          .insert({
+            name: contribution.city_name,
+            country: contribution.city_country || "",
+            slug,
+            vegan_score: 3,
+            description: `Découvrez les adresses vegan à ${contribution.city_name}.`,
+            image_url: "",
+            lat: contribution.place_lat || 0,
+            lng: contribution.place_lng || 0,
+          })
+          .select()
+          .single();
 
-      cityId = newCity.id;
+        if (cityError) {
+          console.error("Erreur création ville:", cityError);
+          throw cityError;
+        }
+
+        cityId = newCity.id;
+      }
     }
 
     const { error: placeError } = await supabase.from("places").insert({

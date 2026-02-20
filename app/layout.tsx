@@ -6,7 +6,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "GreenTrip — Guide de voyage vegan",
   description:
-    "Trouvez les meilleurs supermarchés bio, épiceries et restaurants vegan dans le monde entier.",
+    "Trouvez les supermarchés et épiceries avec des produits vegan partout dans le monde.",
 };
 
 export default function RootLayout({

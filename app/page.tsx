@@ -16,8 +16,8 @@ export default async function HomePage() {
             partout dans le monde
           </h1>
           <p className="mt-4 text-forest/60 text-lg max-w-xl mx-auto">
-            Restaurants, supermarchés, tips et pièges à éviter — tout ce qu&apos;il
-            faut pour voyager plant-based sereinement.
+            Supermarchés, épiceries et bons plans pour trouver des produits vegan
+            partout où tu voyages.
           </p>
           <div className="mt-8">
             <SearchBar />
@@ -56,8 +56,8 @@ export default async function HomePage() {
               <div className="text-3xl mb-3">📍</div>
               <h3 className="font-semibold text-forest">Explore les lieux</h3>
               <p className="text-sm text-forest/60 mt-2">
-                Restaurants, supermarchés bio, cafés — tous testés et approuvés
-                par la communauté.
+                Grandes surfaces, épiceries, magasins bio — les meilleurs
+                endroits pour trouver des produits vegan.
               </p>
             </div>
             <div>

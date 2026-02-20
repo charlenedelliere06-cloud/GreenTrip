@@ -78,6 +78,13 @@ export function Navbar() {
                       Mon profil
                     </Link>
                     <Link
+                      href="/my-contributions"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2.5 text-sm text-forest hover:bg-beige/50 transition-colors"
+                    >
+                      Mes contributions
+                    </Link>
+                    <Link
                       href="/contribute"
                       onClick={() => setMenuOpen(false)}
                       className="block px-4 py-2.5 text-sm text-forest hover:bg-beige/50 transition-colors"

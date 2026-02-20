@@ -27,6 +27,29 @@ export function CityPlacesSection({ places }: CityPlacesSectionProps) {
     (a, b) => (typePriority[a.type] ?? 99) - (typePriority[b.type] ?? 99)
   );
 
+  if (places.length === 0) {
+    return (
+      <section className="mt-10">
+        <h2 className="text-xl font-bold text-forest mb-4">Lieux</h2>
+        <div className="text-center py-12 bg-beige/30 rounded-2xl">
+          <p className="text-3xl mb-3">🌱</p>
+          <p className="text-forest font-medium text-lg">
+            Aucun lieu pour le moment
+          </p>
+          <p className="text-forest/60 mt-2 max-w-md mx-auto">
+            Sois le premier a partager une bonne adresse vegan ici !
+          </p>
+          <a
+            href="/contribute"
+            className="inline-block mt-4 px-6 py-2 bg-sage text-white rounded-full hover:bg-sage/90 transition-colors"
+          >
+            Ajouter un lieu
+          </a>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="mt-10">
       <h2 className="text-xl font-bold text-forest mb-4">

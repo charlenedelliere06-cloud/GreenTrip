@@ -13,13 +13,13 @@ interface ContributionRow {
   city_name: string | null;
   city_country: string | null;
   is_new_city: boolean;
-  address: string;
-  lat: number | null;
-  lng: number | null;
-  description: string;
-  google_maps_url: string;
-  tags: string[];
-  photos: string[];
+  place_address: string;
+  place_lat: number | null;
+  place_lng: number | null;
+  place_description: string;
+  place_google_maps_url: string;
+  place_tags: string[];
+  place_photos: string[];
   status: "pending" | "approved" | "rejected";
   created_at: string;
 }
@@ -30,6 +30,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("pending");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -70,9 +71,19 @@ export default function AdminPage() {
             item.id === id ? { ...item, status } : item
           )
         );
+        setToast({
+          message: status === "approved" ? "Contribution approuvée !" : "Contribution rejetée.",
+          type: "success",
+        });
+        setTimeout(() => setToast(null), 3000);
+      } else {
+        setToast({ message: "Erreur lors de la modération.", type: "error" });
+        setTimeout(() => setToast(null), 3000);
       }
     } catch (err) {
       console.error("Erreur modération:", err);
+      setToast({ message: "Erreur lors de la modération.", type: "error" });
+      setTimeout(() => setToast(null), 3000);
     } finally {
       setActionLoading(null);
     }
@@ -91,6 +102,15 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
+      {/* Toast notification */}
+      {toast && (
+        <div className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-xl shadow-lg text-sm font-medium ${
+          toast.type === "success" ? "bg-emerald-500 text-white" : "bg-red-500 text-white"
+        }`}>
+          {toast.message}
+        </div>
+      )}
+
       <h1 className="text-2xl font-bold text-forest">Administration</h1>
       <p className="text-forest/60 mt-1">Modération des contributions</p>
 
@@ -147,23 +167,23 @@ export default function AdminPage() {
                     )}
                   </div>
                   <p className="text-sm text-forest/60 mt-1">
-                    {typeLabels[c.place_type || ""] || c.place_type} · {getCityName(c.city_id, c.city_name)} · {c.address}
+                    {typeLabels[c.place_type || ""] || c.place_type} · {getCityName(c.city_id, c.city_name)} · {c.place_address}
                   </p>
                   <p className="text-sm text-forest/80 mt-2">
-                    {c.description}
+                    {c.place_description}
                   </p>
-                  {c.tags && c.tags.length > 0 && (
+                  {c.place_tags && c.place_tags.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-2">
-                      {c.tags.map((tag) => (
+                      {c.place_tags.map((tag) => (
                         <span key={tag} className="text-xs bg-beige text-forest/70 px-2 py-0.5 rounded-full">
                           {tag}
                         </span>
                       ))}
                     </div>
                   )}
-                  {c.photos && c.photos.length > 0 && (
+                  {c.place_photos && c.place_photos.length > 0 && (
                     <div className="flex gap-2 mt-3">
-                      {c.photos.map((photo, i) => (
+                      {c.place_photos.map((photo, i) => (
                         <img key={i} src={photo} alt="" className="w-16 h-16 rounded-lg object-cover" />
                       ))}
                     </div>

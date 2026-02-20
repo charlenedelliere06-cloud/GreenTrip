@@ -11,8 +11,8 @@ interface MapProps {
 }
 
 const typeConfig: Record<string, { color: string; emoji: string; label: string }> = {
-  supermarket: { color: "#f59e0b", emoji: "\uD83D\uDED2", label: "Supermarché" },
-  store: { color: "#10b981", emoji: "\uD83C\uDF3F", label: "Épicerie bio" },
+  supermarket: { color: "#f59e0b", emoji: "\uD83D\uDED2", label: "Grande surface" },
+  store: { color: "#10b981", emoji: "\uD83C\uDF3F", label: "Épicerie" },
 };
 
 export function Map({ center, places, citySlug }: MapProps) {
@@ -183,7 +183,7 @@ function MapInner({ center, places, citySlug }: MapProps) {
 
         {/* Place markers */}
         {visiblePlaces.map((place) => {
-          const cfg = typeConfig[place.type] || typeConfig.restaurant;
+          const cfg = typeConfig[place.type] || typeConfig.store;
           return (
             <Marker
               key={place.id}

@@ -63,11 +63,17 @@ export default async function CityPage({ params }: CityPageProps) {
           <h2 className="text-xl font-bold text-forest mb-4">
             Tips & pièges
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {tips.map((tip) => (
-              <TipCard key={tip.id} tip={tip} />
-            ))}
-          </div>
+          {tips.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {tips.map((tip) => (
+                <TipCard key={tip.id} tip={tip} />
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-forest/40 py-8">
+              Pas encore de tips pour cette ville.
+            </p>
+          )}
         </section>
       </div>
     </div>
