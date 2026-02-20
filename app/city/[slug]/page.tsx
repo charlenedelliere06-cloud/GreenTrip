@@ -24,11 +24,15 @@ export default async function CityPage({ params }: CityPageProps) {
     <div>
       {/* Hero ville */}
       <section className="relative h-64 md:h-80 overflow-hidden">
-        <img
-          src={city.image_url}
-          alt={city.name}
-          className="w-full h-full object-cover"
-        />
+        {city.image_url ? (
+          <img
+            src={city.image_url}
+            alt={city.name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-sage to-forest" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-forest/80 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 max-w-6xl mx-auto">
           <p className="text-beige/80 text-sm">{city.country}</p>

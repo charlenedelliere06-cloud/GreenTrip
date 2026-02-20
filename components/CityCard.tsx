@@ -11,11 +11,17 @@ export function CityCard({ city }: CityCardProps) {
     <Link href={`/city/${city.slug}`} className="group block">
       <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
         <div className="relative h-48 overflow-hidden">
-          <img
-            src={city.image_url}
-            alt={city.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+          {city.image_url ? (
+            <img
+              src={city.image_url}
+              alt={city.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-sage/40 to-forest/30 flex items-center justify-center">
+              <span className="text-4xl font-bold text-white/80">{city.name}</span>
+            </div>
+          )}
           <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full">
             <VeganScore score={city.vegan_score} size="sm" />
           </div>

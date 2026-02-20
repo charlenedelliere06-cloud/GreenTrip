@@ -149,10 +149,44 @@ export async function updateContributionStatus(
     throw updateError;
   }
 
-  // Si approuvé → créer le lieu dans la table places
+  // Si approuvé → créer la ville (si nouvelle) puis le lieu
   if (status === "approved" && contribution) {
+    let cityId = contribution.city_id;
+
+    // Si c'est une nouvelle ville, la créer d'abord
+    if (contribution.is_new_city && contribution.city_name) {
+      const slug = contribution.city_name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+
+      const { data: newCity, error: cityError } = await supabase
+        .from("cities")
+        .insert({
+          name: contribution.city_name,
+          country: contribution.city_country || "",
+          slug,
+          vegan_score: 3,
+          description: `Découvrez les adresses vegan à ${contribution.city_name}.`,
+          image_url: "",
+          lat: contribution.place_lat || 0,
+          lng: contribution.place_lng || 0,
+        })
+        .select()
+        .single();
+
+      if (cityError) {
+        console.error("Erreur création ville:", cityError);
+        throw cityError;
+      }
+
+      cityId = newCity.id;
+    }
+
     const { error: placeError } = await supabase.from("places").insert({
-      city_id: contribution.city_id,
+      city_id: cityId,
       name: contribution.place_name,
       type: contribution.place_type,
       address: contribution.place_address || "",
