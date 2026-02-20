@@ -1,4 +1,5 @@
 import { SearchBar } from "@/components/SearchBar";
+import { GeolocateButton } from "@/components/GeolocateButton";
 import { CityCard } from "@/components/CityCard";
 import { getCities } from "@/lib/supabase-queries";
 
@@ -21,6 +22,7 @@ export default async function HomePage() {
           </p>
           <div className="mt-8">
             <SearchBar />
+            <GeolocateButton />
           </div>
         </div>
       </section>
