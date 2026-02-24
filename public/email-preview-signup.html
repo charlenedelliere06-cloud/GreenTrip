@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview — Email de confirmation GreenTrip</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      background-color: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .email-frame {
+      max-width: 620px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .frame-bar {
+      background: #f5f5f5;
+      padding: 12px 20px;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 13px;
+      color: #666;
+    }
+    .frame-bar strong { color: #333; }
+    .frame-content {
+      padding: 0;
+    }
+    h1.page-title {
+      text-align: center;
+      color: #333;
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 24px;
+    }
+    .toggle-bar {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .toggle-bar button {
+      padding: 8px 20px;
+      border: 1px solid #ccc;
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      border-radius: 4px;
+      margin: 0 4px;
+    }
+    .toggle-bar button.active {
+      background: #333;
+      color: white;
+      border-color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="page-title">Preview du mail de confirmation d'inscription</h1>
+  <div class="toggle-bar">
+    <button class="active" onclick="setMode('light')">Mode clair</button>
+    <button onclick="setMode('dark')">Mode sombre</button>
+  </div>
+
+  <div class="email-frame" id="emailFrame">
+    <div class="frame-bar">
+      <strong>De :</strong> GreenTrip &lt;noreply@greentrip.app&gt;<br>
+      <strong>Objet :</strong> Confirme ton inscription sur GreenTrip
+    </div>
+    <div class="frame-content" id="emailContent">
+      <!-- ============================================ -->
+      <!-- DÉBUT DU TEMPLATE EMAIL (à copier dans Supabase) -->
+      <!-- ============================================ -->
+      <div style="margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+        <div style="max-width:560px; margin:0 auto;">
+
+          <!-- Header vert -->
+          <div style="background-color:#9CAF88; padding:28px 32px; text-align:center;">
+            <span style="color:white; font-size:24px; font-weight:bold; letter-spacing:0.5px;">Green</span><span style="color:#2D5F2D; font-size:24px; font-weight:bold; letter-spacing:0.5px;">Trip</span>
+          </div>
+
+          <!-- Contenu principal -->
+          <div style="background-color:#ffffff; padding:40px 32px 32px;">
+
+            <div style="text-align:center; font-size:40px; margin-bottom:16px;">🌿</div>
+
+            <h2 style="color:#333333; font-size:22px; text-align:center; margin:0 0 20px; font-weight:700;">
+              Bienvenue sur GreenTrip !
+            </h2>
+
+            <p style="color:#555555; font-size:15px; line-height:1.7; text-align:center; margin:0 0 16px;">
+              Ne perds plus de temps &agrave; chercher des produits vegan en voyage. GreenTrip t'aide &agrave; trouver les supermarch&eacute;s et &eacute;piceries vegan-friendly, o&ugrave; que tu sois.
+            </p>
+
+            <p style="color:#888888; font-size:14px; line-height:1.7; text-align:center; margin:0 0 32px;">
+              Confirme ton inscription pour rejoindre la communaut&eacute; et commencer &agrave; explorer.
+            </p>
+
+            <!-- Bouton CTA -->
+            <div style="text-align:center; margin:0 0 32px;">
+              <a href="{{ .ConfirmationURL }}" style="display:inline-block; background-color:#9CAF88; color:white; font-weight:600; font-size:15px; padding:14px 36px; border-radius:25px; text-decoration:none;">
+                Confirmer mon inscription
+              </a>
+            </div>
+          </div>
+
+          <!-- Séparateur -->
+          <div style="background-color:#ffffff; padding:0 32px;">
+            <div style="border-top:1px solid #eeeeee;"></div>
+          </div>
+
+          <!-- Ce que tu pourras faire -->
+          <div style="background-color:#ffffff; padding:28px 32px;">
+            <p style="color:#555555; font-size:14px; font-weight:600; text-align:center; margin:0 0 16px;">
+              Ce que tu peux faire :
+            </p>
+            <table style="margin:0 auto; border-spacing:0; border-collapse:collapse;">
+              <tr>
+                <td style="padding:6px 0; color:#888888; font-size:14px; line-height:1.6;">
+                  <span style="margin-right:8px;">🏙️</span> Explorer les villes et leurs magasins vegan
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:6px 0; color:#888888; font-size:14px; line-height:1.6;">
+                  <span style="margin-right:8px;">🛒</span> Trouver supermarch&eacute;s et &eacute;piceries pr&egrave;s de toi
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:6px 0; color:#888888; font-size:14px; line-height:1.6;">
+                  <span style="margin-right:8px;">📍</span> Partager tes bons plans avec la communaut&eacute;
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Footer -->
+          <div style="padding:24px 32px; text-align:center;">
+            <p style="color:#bbbbbb; font-size:11px; margin:0; line-height:1.5;">
+              Tu re&ccedil;ois cet email car tu t'es inscrit(e) sur GreenTrip.
+            </p>
+          </div>
+
+        </div>
+      </div>
+      <!-- ============================================ -->
+      <!-- FIN DU TEMPLATE EMAIL -->
+      <!-- ============================================ -->
+    </div>
+  </div>
+
+  <script>
+    function setMode(mode) {
+      const frame = document.getElementById('emailFrame');
+      const buttons = document.querySelectorAll('.toggle-bar button');
+      buttons.forEach(b => b.classList.remove('active'));
+      if (mode === 'dark') {
+        document.body.style.backgroundColor = '#1a1a1a';
+        frame.style.backgroundColor = '#1e1e1e';
+        frame.querySelector('.frame-bar').style.backgroundColor = '#2a2a2a';
+        frame.querySelector('.frame-bar').style.borderColor = '#333';
+        frame.querySelector('.frame-bar').style.color = '#999';
+        buttons[1].classList.add('active');
+        document.querySelector('.page-title').style.color = '#ccc';
+      } else {
+        document.body.style.backgroundColor = '#f0f0f0';
+        frame.style.backgroundColor = 'white';
+        frame.querySelector('.frame-bar').style.backgroundColor = '#f5f5f5';
+        frame.querySelector('.frame-bar').style.borderColor = '#e0e0e0';
+        frame.querySelector('.frame-bar').style.color = '#666';
+        buttons[0].classList.add('active');
+        document.querySelector('.page-title').style.color = '#333';
+      }
+    }
+  </script>
+</body>
+</html>
