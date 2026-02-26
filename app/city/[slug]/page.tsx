@@ -70,9 +70,11 @@ export default async function CityPage({ params }: CityPageProps) {
               ))}
             </div>
           ) : (
-            <p className="text-center text-forest/40 py-8">
-              Pas encore de tips pour cette ville.
-            </p>
+            <div className="text-center py-10 bg-beige/30 rounded-2xl">
+              <p className="text-3xl mb-3">💡</p>
+              <p className="text-forest font-medium">Pas encore de tips pour cette ville</p>
+              <p className="text-forest/50 text-sm mt-1">Les astuces de la communauté apparaîtront ici.</p>
+            </div>
           )}
         </section>
       </div>

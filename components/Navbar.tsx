@@ -36,7 +36,7 @@ export function Navbar() {
         </Link>
 
         <div className="flex items-center gap-4 text-sm">
-          <Link href="/" className="hidden sm:block hover:text-sage-dark transition-colors">
+          <Link href="/" className="hover:text-sage-dark transition-colors">
             Explorer
           </Link>
 

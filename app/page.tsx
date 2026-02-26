@@ -27,11 +27,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Top tendance */}
+      {/* Destinations */}
       <section className="max-w-6xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold text-forest mb-6">
-          Top tendance
+        <h2 className="text-2xl font-bold text-forest mb-2">
+          Explore une ville
         </h2>
+        <p className="text-forest/50 mb-6">
+          Trouve les supermarch&eacute;s et &eacute;piceries vegan pr&egrave;s de ta destination.
+        </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {trendingCities.map((city) => (
             <CityCard key={city.id} city={city} />
@@ -45,29 +48,28 @@ export default async function HomePage() {
           <h2 className="text-2xl font-bold text-forest mb-10">
             Comment ça marche
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <div className="text-3xl mb-3">🔍</div>
-              <h3 className="font-semibold text-forest">Cherche ta ville</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="flex flex-col items-center">
+              <div className="text-5xl mb-4">🔍</div>
+              <h3 className="font-semibold text-forest text-lg">Cherche ta ville</h3>
               <p className="text-sm text-forest/60 mt-2">
-                Tape le nom d&apos;une destination pour découvrir son score vegan et ses
-                meilleures adresses.
+                Tape le nom d&apos;une destination pour d&eacute;couvrir son score vegan et ses
+                meilleurs magasins.
               </p>
             </div>
-            <div>
-              <div className="text-3xl mb-3">📍</div>
-              <h3 className="font-semibold text-forest">Explore les lieux</h3>
+            <div className="flex flex-col items-center">
+              <div className="text-5xl mb-4">🛒</div>
+              <h3 className="font-semibold text-forest text-lg">Trouve tes produits</h3>
               <p className="text-sm text-forest/60 mt-2">
-                Grandes surfaces, épiceries, magasins bio — les meilleurs
+                Supermarch&eacute;s, &eacute;piceries, magasins bio &mdash; les meilleurs
                 endroits pour trouver des produits vegan.
               </p>
             </div>
-            <div>
-              <div className="text-3xl mb-3">💡</div>
-              <h3 className="font-semibold text-forest">Lis les tips</h3>
+            <div className="flex flex-col items-center">
+              <div className="text-5xl mb-4">📍</div>
+              <h3 className="font-semibold text-forest text-lg">Partage tes bons plans</h3>
               <p className="text-sm text-forest/60 mt-2">
-                Astuces locales et pièges à éviter pour manger vegan sans
-                stress.
+                Ajoute tes adresses favorites pour aider la communaut&eacute; &agrave; voyager vegan.
               </p>
             </div>
           </div>

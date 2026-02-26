@@ -20,10 +20,22 @@ export default function RootLayout({
         <AuthProvider>
           <Navbar />
           <main className="min-h-screen">{children}</main>
-          <footer className="bg-forest text-beige py-8 mt-16">
-            <div className="max-w-6xl mx-auto px-4 text-center text-sm opacity-80">
-              <p>GreenTrip — Le guide de voyage vegan</p>
-              <p className="mt-1">Fait avec des plantes, pour la planète.</p>
+          <footer className="bg-forest text-beige py-10 mt-16">
+            <div className="max-w-6xl mx-auto px-4">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div className="text-center sm:text-left">
+                  <p className="font-bold text-lg">Green<span className="text-sage-light">Trip</span></p>
+                  <p className="text-sm opacity-60 mt-1">Ne perds plus de temps à chercher des produits vegan en voyage.</p>
+                </div>
+                <div className="flex gap-6 text-sm opacity-80">
+                  <a href="/" className="hover:text-white transition-colors">Explorer</a>
+                  <a href="/login?redirect=/contribute" className="hover:text-white transition-colors">Contribuer</a>
+                  <a href="/login" className="hover:text-white transition-colors">Se connecter</a>
+                </div>
+              </div>
+              <div className="border-t border-beige/20 mt-6 pt-6 text-center text-xs opacity-50">
+                <p>Fait avec des plantes, pour la planète.</p>
+              </div>
             </div>
           </footer>
         </AuthProvider>
