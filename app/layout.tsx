@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/Navbar";
 import "./globals.css";
@@ -17,6 +18,10 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className="bg-offwhite text-forest font-sans antialiased">
+        <Script
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY}&libraries=places`}
+          strategy="afterInteractive"
+        />
         <AuthProvider>
           <Navbar />
           <main className="min-h-screen">{children}</main>

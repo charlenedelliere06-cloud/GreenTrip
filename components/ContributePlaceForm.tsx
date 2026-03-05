@@ -6,6 +6,74 @@ import { City } from "@/lib/types";
 import { getCitiesClient } from "@/lib/supabase-client-queries";
 import { PhotoUpload } from "./PhotoUpload";
 import { LocationPicker, ResolvedAddress } from "./LocationPicker";
+import { AddressAutocomplete } from "./AddressAutocomplete";
+
+/* ─── Mini composant : Ville avec Google Places ─── */
+function CityAutocompleteInput({
+  value,
+  onChange,
+  onCitySelected,
+  autoFilled,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  onCitySelected: (city: string, country: string) => void;
+  autoFilled?: boolean;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const acRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    function check() {
+      if (window.google?.maps?.places) { setReady(true); return; }
+      setTimeout(check, 200);
+    }
+    check();
+  }, []);
+
+  useEffect(() => {
+    if (!ready || !inputRef.current || acRef.current) return;
+
+    const ac = new google.maps.places.Autocomplete(inputRef.current, {
+      types: ["(cities)"],
+      fields: ["address_components", "name"],
+    });
+
+    ac.addListener("place_changed", () => {
+      const place = ac.getPlace();
+      let city = place.name || "";
+      let country = "";
+
+      if (place.address_components) {
+        for (const comp of place.address_components) {
+          if (comp.types.includes("country")) {
+            country = comp.long_name;
+          }
+        }
+      }
+
+      onChange(city);
+      onCitySelected(city, country);
+    });
+
+    acRef.current = ac;
+  }, [ready, onChange, onCitySelected]);
+
+  return (
+    <input
+      ref={inputRef}
+      type="text"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
+        autoFilled && value ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
+      }`}
+      placeholder="Ex: Paris, Bangkok, Berlin..."
+      required
+    />
+  );
+}
 
 interface ContributePlaceFormProps {
   userId: string;
@@ -30,9 +98,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
   const [citySearch, setCitySearch] = useState("");
   const [cityId, setCityId] = useState("");
   const [country, setCountry] = useState("");
-  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
-  const cityInputRef = useRef<HTMLInputElement>(null);
-  const suggestionsRef = useRef<HTMLDivElement>(null);
+  // (ancien dropdown supprimé — on utilise Google Places maintenant)
 
   const [name, setName] = useState("");
   const [type, setType] = useState("supermarket");
@@ -49,34 +115,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
   const selectedCity = cities.find((c) => c.id === cityId);
   const isNewCity = citySearch.trim() !== "" && !selectedCity;
 
-  const filteredCities = citySearch.trim()
-    ? cities.filter(
-        (c) =>
-          c.name.toLowerCase().includes(citySearch.toLowerCase()) ||
-          c.country.toLowerCase().includes(citySearch.toLowerCase())
-      )
-    : cities;
-
-  // Fermer les suggestions quand on clique ailleurs
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (
-        suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node) &&
-        cityInputRef.current && !cityInputRef.current.contains(e.target as Node)
-      ) {
-        setShowCitySuggestions(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleSelectCity = (city: City) => {
-    setCityId(city.id);
-    setCitySearch(city.name);
-    setCountry(city.country);
-    setShowCitySuggestions(false);
-  };
+  // Pas besoin de filteredCities ni handleSelectCity — Google Places gère tout
 
   const [autoFilled, setAutoFilled] = useState(false);
 
@@ -230,80 +269,41 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
 
         {/* Ville + Pays côte à côte */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* Ville */}
+          {/* Ville — Google Places Autocomplete */}
           <div className="relative">
             <label className="block text-sm font-medium text-forest mb-1">
               Ville
             </label>
-            <input
-              ref={cityInputRef}
-              type="text"
+            <CityAutocompleteInput
               value={citySearch}
-              onChange={(e) => {
-                setCitySearch(e.target.value);
+              onChange={(val) => {
+                setCitySearch(val);
                 setCityId("");
                 setCountry("");
                 setAutoFilled(false);
-                setShowCitySuggestions(true);
               }}
-              onFocus={() => setShowCitySuggestions(true)}
-              className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
-                autoFilled && citySearch ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
-              }`}
-              placeholder="Ex: Bangkok, Berlin..."
-              required
+              onCitySelected={(cityName, countryName) => {
+                setCitySearch(cityName);
+                setCountry(countryName);
+                const match = cities.find(
+                  (c) => c.name.toLowerCase() === cityName.toLowerCase()
+                );
+                if (match) {
+                  setCityId(match.id);
+                }
+                setAutoFilled(true);
+              }}
+              autoFilled={autoFilled}
             />
-
-            {/* Suggestions dropdown */}
-            {showCitySuggestions && (
-              <div
-                ref={suggestionsRef}
-                className="absolute z-20 left-0 right-0 mt-1 bg-white border border-beige-dark rounded-xl shadow-lg overflow-hidden max-h-52 overflow-y-auto"
-              >
-                {filteredCities.length > 0 && (
-                  <div>
-                    {filteredCities.map((c) => (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => handleSelectCity(c)}
-                        className="w-full text-left px-4 py-2.5 hover:bg-beige/50 transition-colors flex items-center justify-between"
-                      >
-                        <span className="text-forest font-medium">{c.name}</span>
-                        <span className="text-forest/40 text-sm">{c.country}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {citySearch.trim() &&
-                  !filteredCities.some(
-                    (c) => c.name.toLowerCase() === citySearch.toLowerCase()
-                  ) && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCityId("");
-                        setCountry("");
-                        setShowCitySuggestions(false);
-                      }}
-                      className="w-full text-left px-4 py-2.5 border-t border-beige-dark bg-sage/5 flex items-center gap-2 text-sage-dark font-medium hover:bg-sage/10 transition-colors"
-                    >
-                      <span className="text-lg leading-none">+</span>
-                      Ajouter &quot;{citySearch.trim()}&quot;
-                    </button>
-                  )}
-              </div>
-            )}
-
             {selectedCity && (
               <p className="text-xs text-sage mt-1 flex items-center gap-1">
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
-                Ville existante
+                Ville existante sur GreenTrip
               </p>
             )}
-            {isNewCity && !showCitySuggestions && (
+            {isNewCity && citySearch.trim() && (
               <p className="text-xs text-forest/40 mt-1">
                 Nouvelle ville — sera ajoutée après vérification
               </p>
@@ -329,20 +329,36 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
           </div>
         </div>
 
-        {/* Adresse */}
+        {/* Adresse avec autocomplete Google */}
         <div>
           <label className="block text-sm font-medium text-forest mb-1">
             Adresse
             <span className="text-forest/40 font-normal ml-1">(optionnel)</span>
           </label>
-          <input
-            type="text"
+          <AddressAutocomplete
             value={address}
-            onChange={(e) => { setAddress(e.target.value); setAutoFilled(false); }}
-            className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
-              autoFilled && address ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
-            }`}
-            placeholder="Ex: 42 Rue du Temple, quartier Marais"
+            onChange={(val) => { setAddress(val); setAutoFilled(false); }}
+            onPlaceSelected={(result) => {
+              setAddress(result.address);
+              setLat(result.lat);
+              setLng(result.lng);
+              if (result.city) {
+                const match = cities.find(
+                  (c) => c.name.toLowerCase() === result.city.toLowerCase()
+                );
+                if (match) {
+                  setCityId(match.id);
+                  setCitySearch(match.name);
+                  setCountry(match.country);
+                } else {
+                  setCityId("");
+                  setCitySearch(result.city);
+                  setCountry(result.country);
+                }
+              }
+              setAutoFilled(true);
+            }}
+            autoFilled={autoFilled}
           />
         </div>
       </fieldset>
