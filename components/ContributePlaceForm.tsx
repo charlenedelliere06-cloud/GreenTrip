@@ -110,7 +110,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
   const [citySearch, setCitySearch] = useState("");
   const [cityId, setCityId] = useState("");
   const [country, setCountry] = useState("");
-  // (ancien dropdown supprimé — on utilise Google Places maintenant)
+  const [postalCode, setPostalCode] = useState("");
 
   const [name, setName] = useState("");
   const [type, setType] = useState("supermarket");
@@ -228,6 +228,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
     setCityId("");
     setCitySearch("");
     setCountry("");
+    setPostalCode("");
     setAutoFilled(false);
   };
 
@@ -279,7 +280,41 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
           <div className="flex-1 h-px bg-beige-dark" />
         </div>
 
-        {/* Ville + Pays côte à côte */}
+        {/* Adresse avec autocomplete Google — en premier */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-1">
+            Adresse
+            <span className="text-forest/40 font-normal ml-1">(optionnel)</span>
+          </label>
+          <AddressAutocomplete
+            value={address}
+            onChange={(val) => { setAddress(val); setAutoFilled(false); }}
+            onPlaceSelected={(result) => {
+              setAddress(result.address);
+              setLat(result.lat);
+              setLng(result.lng);
+              if (result.postalCode) setPostalCode(result.postalCode);
+              if (result.city) {
+                const match = cities.find(
+                  (c) => c.name.toLowerCase() === result.city.toLowerCase()
+                );
+                if (match) {
+                  setCityId(match.id);
+                  setCitySearch(match.name);
+                  setCountry(match.country);
+                } else {
+                  setCityId("");
+                  setCitySearch(result.city);
+                  setCountry(result.country);
+                }
+              }
+              setAutoFilled(true);
+            }}
+            autoFilled={autoFilled}
+          />
+        </div>
+
+        {/* Ville + Code postal côte à côte */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Ville — Google Places Autocomplete */}
           <div className="relative">
@@ -322,55 +357,37 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
             )}
           </div>
 
-          {/* Pays — toujours visible */}
+          {/* Code postal */}
           <div>
             <label className="block text-sm font-medium text-forest mb-1">
-              Pays
+              Code postal
             </label>
             <input
               type="text"
-              value={country}
-              onChange={(e) => { setCountry(e.target.value); setAutoFilled(false); }}
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
               className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
-                selectedCity ? "border-beige-dark bg-beige/50" : autoFilled && country ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
+                autoFilled && postalCode ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
               }`}
-              placeholder="Ex: Thaïlande, Allemagne..."
-              required
-              readOnly={!!selectedCity}
+              placeholder="Ex: 51100, 75001..."
             />
           </div>
         </div>
 
-        {/* Adresse avec autocomplete Google */}
+        {/* Pays — auto-rempli */}
         <div>
           <label className="block text-sm font-medium text-forest mb-1">
-            Adresse
-            <span className="text-forest/40 font-normal ml-1">(optionnel)</span>
+            Pays
           </label>
-          <AddressAutocomplete
-            value={address}
-            onChange={(val) => { setAddress(val); setAutoFilled(false); }}
-            onPlaceSelected={(result) => {
-              setAddress(result.address);
-              setLat(result.lat);
-              setLng(result.lng);
-              if (result.city) {
-                const match = cities.find(
-                  (c) => c.name.toLowerCase() === result.city.toLowerCase()
-                );
-                if (match) {
-                  setCityId(match.id);
-                  setCitySearch(match.name);
-                  setCountry(match.country);
-                } else {
-                  setCityId("");
-                  setCitySearch(result.city);
-                  setCountry(result.country);
-                }
-              }
-              setAutoFilled(true);
-            }}
-            autoFilled={autoFilled}
+          <input
+            type="text"
+            value={country}
+            onChange={(e) => { setCountry(e.target.value); setAutoFilled(false); }}
+            className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
+              autoFilled && country ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
+            }`}
+            placeholder="Ex: France, Allemagne..."
+            required
           />
         </div>
       </fieldset>

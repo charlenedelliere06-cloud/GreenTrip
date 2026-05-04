@@ -8,6 +8,7 @@ interface AddressResult {
   lng: number;
   city: string;
   country: string;
+  postalCode: string;
 }
 
 interface AddressAutocompleteProps {
@@ -76,6 +77,7 @@ export function AddressAutocomplete({
 
       let city = "";
       let country = "";
+      let postalCode = "";
 
       if (place.address_components) {
         for (const comp of place.address_components) {
@@ -88,6 +90,9 @@ export function AddressAutocomplete({
           if (comp.types.includes("country")) {
             country = comp.long_name;
           }
+          if (comp.types.includes("postal_code")) {
+            postalCode = comp.long_name;
+          }
         }
       }
 
@@ -97,7 +102,7 @@ export function AddressAutocomplete({
       }
 
       onChange(address);
-      onPlaceSelected({ address, lat, lng, city, country });
+      onPlaceSelected({ address, lat, lng, city, country, postalCode });
     });
 
     autocompleteRef.current = autocomplete;

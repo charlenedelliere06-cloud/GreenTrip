@@ -9,7 +9,7 @@ interface PhotoUploadProps {
 }
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export function PhotoUpload({
   photos,
@@ -30,7 +30,7 @@ export function PhotoUpload({
         continue;
       }
       if (file.size > MAX_FILE_SIZE) {
-        setError("Fichier trop lourd (max 5MB).");
+        setError("Fichier trop lourd (max 10MB).");
         continue;
       }
       validFiles.push(file);
@@ -100,7 +100,7 @@ export function PhotoUpload({
           tes photos ici
         </p>
         <p className="text-xs text-forest/40 mt-1">
-          JPG, PNG ou WebP — Max 5MB par photo
+          JPG, PNG ou WebP — Max 10MB par photo
         </p>
       </div>
 
