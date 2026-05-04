@@ -53,6 +53,11 @@ function CityAutocompleteInput({
         }
       }
 
+      // Mettre à jour l'input directement (sans passer par React)
+      if (inputRef.current) {
+        inputRef.current.value = city;
+      }
+
       onChange(city);
       onCitySelected(city, country);
     });
@@ -60,11 +65,18 @@ function CityAutocompleteInput({
     acRef.current = ac;
   }, [ready, onChange, onCitySelected]);
 
+  // Synchroniser la valeur du parent vers l'input (pour le reset du formulaire)
+  useEffect(() => {
+    if (inputRef.current && inputRef.current.value !== value) {
+      inputRef.current.value = value;
+    }
+  }, [value]);
+
   return (
     <input
       ref={inputRef}
       type="text"
-      value={value}
+      defaultValue={value}
       onChange={(e) => onChange(e.target.value)}
       className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
         autoFilled && value ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"

@@ -47,6 +47,13 @@ export function AddressAutocomplete({
     checkGoogle();
   }, []);
 
+  // Synchroniser la valeur du parent vers l'input (pour le reset du formulaire)
+  useEffect(() => {
+    if (inputRef.current && inputRef.current.value !== value) {
+      inputRef.current.value = value;
+    }
+  }, [value]);
+
   // Initialiser l'autocomplete
   useEffect(() => {
     if (!ready || !inputRef.current || autocompleteRef.current) return;
@@ -84,6 +91,11 @@ export function AddressAutocomplete({
         }
       }
 
+      // Mettre à jour l'input directement (sans passer par React)
+      if (inputRef.current) {
+        inputRef.current.value = address;
+      }
+
       onChange(address);
       onPlaceSelected({ address, lat, lng, city, country });
     });
@@ -95,7 +107,7 @@ export function AddressAutocomplete({
     <input
       ref={inputRef}
       type="text"
-      value={value}
+      defaultValue={value}
       onChange={(e) => onChange(e.target.value)}
       className={
         className ||
