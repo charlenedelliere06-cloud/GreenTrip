@@ -7,6 +7,7 @@ import { getCitiesClient } from "@/lib/supabase-client-queries";
 import { PhotoUpload } from "./PhotoUpload";
 import { LocationPicker, ResolvedAddress } from "./LocationPicker";
 import { AddressAutocomplete } from "./AddressAutocomplete";
+import { uploadPlacePhoto } from "@/lib/storage";
 
 /* ─── Mini composant : Ville avec Google Places ─── */
 function CityAutocompleteInput({
@@ -179,7 +180,15 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
         .map((t) => t.trim())
         .filter(Boolean);
 
+      // Upload des photos vers Supabase Storage
       const photoUrls: string[] = [];
+      if (photos.length > 0) {
+        const tempFolder = `contribution-${Date.now()}`;
+        for (const photo of photos) {
+          const url = await uploadPlacePhoto(photo, tempFolder);
+          photoUrls.push(url);
+        }
+      }
 
       const body = {
         user_id: userId,

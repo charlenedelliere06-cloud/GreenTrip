@@ -1,8 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { City } from "@/lib/types";
 import { getCitiesClient } from "@/lib/supabase-client-queries";
+
+interface PlaceRow {
+  id: string;
+  name: string;
+  type: string;
+  address: string;
+  city_id: string;
+  photos: string[];
+  created_at: string;
+}
 
 interface ContributionRow {
   id: string;
@@ -27,7 +38,9 @@ interface ContributionRow {
 export default function AdminPage() {
   const [contributions, setContributions] = useState<ContributionRow[]>([]);
   const [cities, setCities] = useState<City[]>([]);
+  const [places, setPlaces] = useState<PlaceRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<"contributions" | "places">("contributions");
   const [filter, setFilter] = useState<string>("pending");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
@@ -35,10 +48,12 @@ export default function AdminPage() {
   useEffect(() => {
     Promise.all([
       fetch("/api/contributions").then((res) => res.json()),
+      fetch("/api/places").then((res) => res.json()),
       getCitiesClient(),
     ])
-      .then(([contribs, citiesData]) => {
+      .then(([contribs, placesData, citiesData]) => {
         if (Array.isArray(contribs)) setContributions(contribs);
+        if (Array.isArray(placesData)) setPlaces(placesData);
         setCities(citiesData);
       })
       .catch(() => {})
@@ -112,8 +127,90 @@ export default function AdminPage() {
       )}
 
       <h1 className="text-2xl font-bold text-forest">Administration</h1>
-      <p className="text-forest/60 mt-1">Modération des contributions</p>
 
+      {/* Onglets */}
+      <div className="flex gap-2 mt-4 border-b border-beige-dark">
+        <button
+          onClick={() => setTab("contributions")}
+          className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+            tab === "contributions"
+              ? "border-sage text-sage-dark"
+              : "border-transparent text-forest/50 hover:text-forest"
+          }`}
+        >
+          Contributions
+          {contributions.filter((c) => c.status === "pending").length > 0 && (
+            <span className="ml-2 bg-amber-400 text-white text-xs rounded-full px-1.5 py-0.5">
+              {contributions.filter((c) => c.status === "pending").length}
+            </span>
+          )}
+        </button>
+        <button
+          onClick={() => setTab("places")}
+          className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+            tab === "places"
+              ? "border-sage text-sage-dark"
+              : "border-transparent text-forest/50 hover:text-forest"
+          }`}
+        >
+          Lieux publiés ({places.length})
+        </button>
+      </div>
+
+      {/* === ONGLET LIEUX === */}
+      {tab === "places" && (
+        <div className="mt-6 space-y-3">
+          {loading ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => <div key={i} className="h-16 bg-beige rounded-xl animate-pulse" />)}
+            </div>
+          ) : places.length === 0 ? (
+            <div className="bg-white rounded-xl p-8 shadow-sm text-center">
+              <p className="text-forest/50">Aucun lieu publié pour l&apos;instant.</p>
+            </div>
+          ) : (
+            places.map((place) => (
+              <div key={place.id} className="bg-white rounded-xl p-4 shadow-sm flex items-center justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-forest">{place.name}</p>
+                  <p className="text-sm text-forest/50 truncate">{place.address}</p>
+                  <p className="text-xs text-forest/40 mt-0.5">
+                    {place.photos?.length || 0} photo{(place.photos?.length || 0) > 1 ? "s" : ""}
+                  </p>
+                </div>
+                <div className="flex gap-2 shrink-0">
+                  <Link
+                    href={`/admin/places/${place.id}/edit`}
+                    className="bg-sage/10 text-sage-dark px-3 py-2 rounded-lg text-sm font-medium hover:bg-sage/20 transition-colors"
+                  >
+                    ✏️ Modifier
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      if (!confirm(`Supprimer "${place.name}" ?`)) return;
+                      const res = await fetch(`/api/places/${place.id}`, { method: "DELETE" });
+                      if (res.ok) {
+                        setPlaces((prev) => prev.filter((p) => p.id !== place.id));
+                        setToast({ message: "Lieu supprimé.", type: "success" });
+                        setTimeout(() => setToast(null), 3000);
+                      } else {
+                        setToast({ message: "Erreur lors de la suppression.", type: "error" });
+                        setTimeout(() => setToast(null), 3000);
+                      }
+                    }}
+                    className="bg-red-50 text-red-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors"
+                  >
+                    🗑️ Supprimer
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* === ONGLET CONTRIBUTIONS === */}
+      {tab === "contributions" && <>
       {/* Filtres */}
       <div className="flex gap-2 mt-6">
         {[
@@ -239,6 +336,7 @@ export default function AdminPage() {
           <p className="text-xs text-forest/50 mt-1">Rejetées</p>
         </div>
       </div>
+      </>}
     </div>
   );
 }

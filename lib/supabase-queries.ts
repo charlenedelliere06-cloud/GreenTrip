@@ -1,4 +1,5 @@
 import { createSupabaseServer } from "./supabase-server";
+import { createSupabaseAdmin } from "./supabase-admin";
 import { City, Place, Tip } from "./types";
 
 // ============================================
@@ -218,5 +219,57 @@ export async function updateContributionStatus(
   }
 
   return contribution;
+}
+
+export async function getPlaces(): Promise<Place[]> {
+  const supabase = await createSupabaseServer();
+  const { data, error } = await supabase
+    .from("places")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Erreur getPlaces:", error);
+    return [];
+  }
+  return data || [];
+}
+
+export async function deletePlace(id: string) {
+  const supabase = createSupabaseAdmin();
+  const { error } = await supabase.from("places").delete().eq("id", id);
+  if (error) {
+    console.error("Erreur deletePlace:", error);
+    throw error;
+  }
+}
+
+export async function updatePlace(
+  id: string,
+  updates: {
+    name?: string;
+    type?: string;
+    address?: string;
+    description?: string;
+    google_maps_url?: string;
+    tags?: string[];
+    photos?: string[];
+    lat?: number;
+    lng?: number;
+  }
+) {
+  const supabase = createSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("places")
+    .update(updates)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Erreur updatePlace:", error);
+    throw error;
+  }
+  return data;
 }
 

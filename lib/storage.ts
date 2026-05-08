@@ -1,14 +1,14 @@
 import { createSupabaseBrowser } from "./supabase-browser";
 
 const BUCKET_NAME = "place-photos";
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export async function uploadPlacePhoto(
   file: File,
   placeId: string
 ): Promise<string> {
   if (file.size > MAX_FILE_SIZE) {
-    throw new Error("Le fichier dépasse la taille maximale de 5MB");
+    throw new Error("Le fichier dépasse la taille maximale de 10MB");
   }
 
   const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
