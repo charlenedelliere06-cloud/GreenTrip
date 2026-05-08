@@ -264,14 +264,111 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-sm mt-6">
-      {/* === SECTION 1 : Où ? === */}
+      {/* === SECTION 1 : Quoi ? === */}
       <fieldset className="space-y-4">
         <legend className="text-base font-bold text-forest flex items-center gap-2 mb-3">
           <span className="w-6 h-6 rounded-full bg-sage text-white text-xs flex items-center justify-center font-bold">1</span>
+          Quel est ce lieu ?
+        </legend>
+
+        {/* Nom */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-1">
+            Nom du lieu
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
+            placeholder="Ex: Whole Foods Market, Veganz..."
+          />
+        </div>
+
+        {/* Type */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-2">
+            Type de lieu
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {placeTypes.map((pt) => (
+              <button
+                key={pt.value}
+                type="button"
+                onClick={() => setType(pt.value)}
+                className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all ${
+                  type === pt.value
+                    ? "bg-sage text-white border-sage shadow-sm"
+                    : "bg-offwhite text-forest/70 border-beige-dark hover:border-sage/50"
+                }`}
+              >
+                <span>{pt.icon}</span>
+                <span>{pt.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Gamme de prix */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-2">
+            Gamme de prix
+            <span className="text-forest/40 font-normal ml-1">(optionnel)</span>
+          </label>
+          <div className="flex gap-2">
+            {[
+              { value: 1, label: "€", desc: "Pas cher" },
+              { value: 2, label: "€€", desc: "Moyen" },
+              { value: 3, label: "€€€", desc: "Cher" },
+            ].map((p) => (
+              <button
+                key={p.value}
+                type="button"
+                onClick={() => setPriceRange(priceRange === p.value ? null : p.value)}
+                className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-all flex flex-col items-center gap-0.5 ${
+                  priceRange === p.value
+                    ? "bg-sage text-white border-sage shadow-sm"
+                    : "bg-offwhite text-forest/70 border-beige-dark hover:border-sage/50"
+                }`}
+              >
+                <span className="font-bold">{p.label}</span>
+                <span className="text-xs opacity-70">{p.desc}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Description */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-1">
+            Description
+          </label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            maxLength={500}
+            rows={3}
+            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage resize-none"
+            placeholder="Qu'est-ce qu'on y trouve ? Pourquoi c'est bien pour les vegans ?"
+          />
+          <p className="text-xs text-forest/40 text-right mt-1">
+            {description.length}/500
+          </p>
+        </div>
+      </fieldset>
+
+      <hr className="my-6 border-beige-dark" />
+
+      {/* === SECTION 2 : Où ? === */}
+      <fieldset className="space-y-4">
+        <legend className="text-base font-bold text-forest flex items-center gap-2 mb-3">
+          <span className="w-6 h-6 rounded-full bg-sage text-white text-xs flex items-center justify-center font-bold">2</span>
           Où se trouve le lieu ?
         </legend>
 
-        {/* Localisation carte — en premier */}
+        {/* Localisation carte */}
         <div>
           <p className="text-sm text-forest/60 mb-2">
             Utilise ta position ou clique sur la carte — la ville, le pays et l&apos;adresse se rempliront automatiquement.
@@ -292,7 +389,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
           <div className="flex-1 h-px bg-beige-dark" />
         </div>
 
-        {/* Adresse avec autocomplete Google — en premier */}
+        {/* Adresse avec autocomplete Google */}
         <div>
           <label className="block text-sm font-medium text-forest mb-1">
             Adresse
@@ -401,103 +498,6 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
             placeholder="Ex: France, Allemagne..."
             required
           />
-        </div>
-      </fieldset>
-
-      <hr className="my-6 border-beige-dark" />
-
-      {/* === SECTION 2 : Quoi ? === */}
-      <fieldset className="space-y-4">
-        <legend className="text-base font-bold text-forest flex items-center gap-2 mb-3">
-          <span className="w-6 h-6 rounded-full bg-sage text-white text-xs flex items-center justify-center font-bold">2</span>
-          Quel est ce lieu ?
-        </legend>
-
-        {/* Nom */}
-        <div>
-          <label className="block text-sm font-medium text-forest mb-1">
-            Nom du lieu
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
-            placeholder="Ex: Whole Foods Market, Veganz..."
-          />
-        </div>
-
-        {/* Type */}
-        <div>
-          <label className="block text-sm font-medium text-forest mb-2">
-            Type de lieu
-          </label>
-          <div className="grid grid-cols-2 gap-2">
-            {placeTypes.map((pt) => (
-              <button
-                key={pt.value}
-                type="button"
-                onClick={() => setType(pt.value)}
-                className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all ${
-                  type === pt.value
-                    ? "bg-sage text-white border-sage shadow-sm"
-                    : "bg-offwhite text-forest/70 border-beige-dark hover:border-sage/50"
-                }`}
-              >
-                <span>{pt.icon}</span>
-                <span>{pt.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Gamme de prix */}
-        <div>
-          <label className="block text-sm font-medium text-forest mb-2">
-            Gamme de prix
-            <span className="text-forest/40 font-normal ml-1">(optionnel)</span>
-          </label>
-          <div className="flex gap-2">
-            {[
-              { value: 1, label: "€", desc: "Pas cher" },
-              { value: 2, label: "€€", desc: "Moyen" },
-              { value: 3, label: "€€€", desc: "Cher" },
-            ].map((p) => (
-              <button
-                key={p.value}
-                type="button"
-                onClick={() => setPriceRange(priceRange === p.value ? null : p.value)}
-                className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-all flex flex-col items-center gap-0.5 ${
-                  priceRange === p.value
-                    ? "bg-sage text-white border-sage shadow-sm"
-                    : "bg-offwhite text-forest/70 border-beige-dark hover:border-sage/50"
-                }`}
-              >
-                <span className="font-bold">{p.label}</span>
-                <span className="text-xs opacity-70">{p.desc}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Description */}
-        <div>
-          <label className="block text-sm font-medium text-forest mb-1">
-            Description
-          </label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            maxLength={500}
-            rows={3}
-            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage resize-none"
-            placeholder="Qu'est-ce qu'on y trouve ? Pourquoi c'est bien pour les vegans ?"
-          />
-          <p className="text-xs text-forest/40 text-right mt-1">
-            {description.length}/500
-          </p>
         </div>
       </fieldset>
 
