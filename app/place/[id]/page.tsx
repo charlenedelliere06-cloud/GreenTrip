@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getPlaceById, getCities } from "@/lib/supabase-queries";
 import { PhotoGallery } from "@/components/PhotoGallery";
+import { ReviewSection } from "@/components/ReviewSection";
 
 const typeLabels: Record<string, string> = {
   supermarket: "Supermarché",
@@ -119,6 +120,8 @@ export default async function PlacePage({ params }: PlacePageProps) {
           )}
         </div>
       </div>
+      {/* Avis de la communauté */}
+      <ReviewSection placeId={place.id} />
     </div>
   );
 }

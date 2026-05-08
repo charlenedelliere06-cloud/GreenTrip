@@ -1,4 +1,5 @@
 import { createSupabaseBrowser } from "./supabase-browser";
+import { compressImage } from "./compress-image";
 
 const BUCKET_NAME = "place-photos";
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -16,13 +17,15 @@ export async function uploadPlacePhoto(
     throw new Error("Format non supporté. Utilisez JPG, PNG ou WebP.");
   }
 
+  // Compression automatique avant upload
+  const compressed = await compressImage(file);
+
   const supabase = createSupabaseBrowser();
-  const fileExt = file.name.split(".").pop();
-  const fileName = `${placeId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
+  const fileName = `${placeId}/${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
 
   const { data, error } = await supabase.storage
     .from(BUCKET_NAME)
-    .upload(fileName, file, {
+    .upload(fileName, compressed, {
       cacheControl: "3600",
       upsert: false,
     });

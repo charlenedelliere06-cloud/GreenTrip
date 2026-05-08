@@ -43,6 +43,15 @@ export interface User {
   created_at: string;
 }
 
+export interface Review {
+  id: string;
+  place_id: string;
+  user_id: string;
+  content: string;
+  photos: string[];
+  created_at: string;
+}
+
 export interface Contribution {
   id: string;
   user_id: string;
