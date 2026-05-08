@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { uploadPlacePhoto } from "@/lib/storage";
 import { Review } from "@/lib/types";
+import { PhotoUpload } from "./PhotoUpload";
 
 interface ReviewSectionProps {
   placeId: string;
@@ -32,7 +33,6 @@ export function ReviewSection({ placeId }: ReviewSectionProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [lightbox, setLightbox] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetch(`/api/reviews?place_id=${placeId}`)
@@ -98,42 +98,15 @@ export function ReviewSection({ placeId }: ReviewSectionProps) {
           <p className="text-xs text-forest/30 text-right mt-1 mb-3">{content.length}/1000</p>
 
           {/* Photos */}
-          <div className="mb-3">
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="text-sm text-sage-dark hover:text-sage font-medium flex items-center gap-1.5 transition-colors"
-            >
-              📸 Ajouter des photos
-              {photos.length > 0 && <span className="text-forest/40">({photos.length})</span>}
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".jpg,.jpeg,.png,.webp"
-              multiple
-              className="hidden"
-              onChange={(e) => {
-                if (!e.target.files) return;
-                const arr = Array.from(e.target.files).filter((f) => f.size <= 10 * 1024 * 1024);
-                setPhotos((prev) => [...prev, ...arr]);
-                e.target.value = "";
-              }}
+          <div className="mb-4">
+            <p className="text-xs font-medium text-forest/50 mb-2">
+              Photos <span className="font-normal">(optionnel)</span>
+            </p>
+            <PhotoUpload
+              photos={photos}
+              onPhotosChange={setPhotos}
+              maxPhotos={5}
             />
-            {photos.length > 0 && (
-              <div className="flex gap-2 mt-2 flex-wrap">
-                {photos.map((f, i) => (
-                  <div key={i} className="relative group">
-                    <img src={URL.createObjectURL(f)} alt="" className="w-16 h-16 object-cover rounded-lg" />
-                    <button
-                      type="button"
-                      onClick={() => setPhotos((prev) => prev.filter((_, j) => j !== i))}
-                      className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                    >✕</button>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
 
           {error && <p className="text-sm text-red-600 mb-3">{error}</p>}
