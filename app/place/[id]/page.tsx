@@ -50,9 +50,16 @@ export default async function PlacePage({ params }: PlacePageProps) {
       <div className="bg-white rounded-2xl p-6 shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <span className="inline-block text-xs font-medium bg-sage/10 text-sage-dark px-2.5 py-1 rounded-full mb-3">
-              {typeLabels[place.type]}
-            </span>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="inline-block text-xs font-medium bg-sage/10 text-sage-dark px-2.5 py-1 rounded-full">
+                {typeLabels[place.type]}
+              </span>
+              {place.price_range && (
+                <span className="inline-block text-xs font-medium bg-beige text-forest/70 px-2.5 py-1 rounded-full">
+                  {"€".repeat(place.price_range)}
+                </span>
+              )}
+            </div>
             <h1 className="text-2xl md:text-3xl font-bold text-forest">
               {place.name}
             </h1>

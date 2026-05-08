@@ -20,6 +20,7 @@ export default function EditPlacePage() {
 
   const [name, setName] = useState("");
   const [type, setType] = useState("supermarket");
+  const [priceRange, setPriceRange] = useState<number | null>(null);
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
   const [googleMapsUrl, setGoogleMapsUrl] = useState("");
@@ -37,6 +38,7 @@ export default function EditPlacePage() {
         // On charge via getPlaceById
         setName(data.name || "");
         setType(data.type || "supermarket");
+        setPriceRange(data.price_range || null);
         setAddress(data.address || "");
         setDescription(data.description || "");
         setGoogleMapsUrl(data.google_maps_url || "");
@@ -90,6 +92,7 @@ export default function EditPlacePage() {
         body: JSON.stringify({
           name,
           type,
+          price_range: priceRange,
           address,
           description,
           google_maps_url: googleMapsUrl,
@@ -169,6 +172,32 @@ export default function EditPlacePage() {
               >
                 <span>{pt.icon}</span>
                 <span>{pt.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Gamme de prix */}
+        <div>
+          <label className="block text-sm font-medium text-forest mb-2">Gamme de prix</label>
+          <div className="flex gap-2">
+            {[
+              { value: 1, label: "€", desc: "Pas cher" },
+              { value: 2, label: "€€", desc: "Moyen" },
+              { value: 3, label: "€€€", desc: "Cher" },
+            ].map((p) => (
+              <button
+                key={p.value}
+                type="button"
+                onClick={() => setPriceRange(priceRange === p.value ? null : p.value)}
+                className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-all flex flex-col items-center gap-0.5 ${
+                  priceRange === p.value
+                    ? "bg-sage text-white border-sage shadow-sm"
+                    : "bg-offwhite text-forest/70 border-beige-dark hover:border-sage/50"
+                }`}
+              >
+                <span className="font-bold">{p.label}</span>
+                <span className="text-xs opacity-70">{p.desc}</span>
               </button>
             ))}
           </div>

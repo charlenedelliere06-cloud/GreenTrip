@@ -208,6 +208,7 @@ export async function updateContributionStatus(
       google_maps_url: contribution.place_google_maps_url || "",
       tags: contribution.place_tags || [],
       photos: contribution.place_photos || [],
+      price_range: contribution.place_price_range || null,
       status: "approved",
       added_by: contribution.user_id,
     });

@@ -22,6 +22,7 @@ export interface Place {
   google_maps_url: string;
   tags: string[];
   photos: string[];
+  price_range?: number | null; // 1=€  2=€€  3=€€€
   added_by?: string;
   created_at?: string;
 }
