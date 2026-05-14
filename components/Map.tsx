@@ -71,45 +71,63 @@ function MapInner({ center, places, nearbyPlaces = [], citySlug }: MapProps) {
   const createColoredIcon = useCallback((color: string, emoji: string) => {
     return L.divIcon({
       className: "custom-marker",
-      html: `<div style="
-        background: ${color};
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        border: 3px solid white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        cursor: pointer;
-      ">${emoji}</div>`,
-      iconSize: [36, 36],
-      iconAnchor: [18, 18],
-      popupAnchor: [0, -20],
+      html: `<div style="display:flex;flex-direction:column;align-items:center;cursor:pointer;">
+        <div style="
+          background: ${color};
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          
+          box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+        ">${emoji}</div>
+        <div style="
+          width: 0;
+          height: 0;
+          border-left: 7px solid transparent;
+          border-right: 7px solid transparent;
+          border-top: 10px solid ${color};
+          margin-top: -2px;
+          filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+        "></div>
+      </div>`,
+      iconSize: [38, 50],
+      iconAnchor: [19, 50],
+      popupAnchor: [0, -52],
     });
   }, [L]);
 
   const createNearbyIcon = useCallback((color: string, emoji: string) => {
     return L.divIcon({
       className: "custom-marker-nearby",
-      html: `<div style="
-        background: ${color};
-        opacity: 0.65;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        border: 2px dashed white;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        cursor: pointer;
-      ">${emoji}</div>`,
-      iconSize: [28, 28],
-      iconAnchor: [14, 14],
-      popupAnchor: [0, -16],
+      html: `<div style="display:flex;flex-direction:column;align-items:center;cursor:pointer;opacity:0.7;">
+        <div style="
+          background: ${color};
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 13px;
+          
+          box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        ">${emoji}</div>
+        <div style="
+          width: 0;
+          height: 0;
+          border-left: 5px solid transparent;
+          border-right: 5px solid transparent;
+          border-top: 7px solid ${color};
+          margin-top: -1px;
+        "></div>
+      </div>`,
+      iconSize: [28, 37],
+      iconAnchor: [14, 37],
+      popupAnchor: [0, -38],
     });
   }, [L]);
 
@@ -329,7 +347,7 @@ function MapInner({ center, places, nearbyPlaces = [], citySlug }: MapProps) {
                   width: 20px;
                   height: 20px;
                   background: #3b82f6;
-                  border: 3px solid white;
+                  
                   border-radius: 50%;
                   box-shadow: 0 0 10px rgba(59,130,246,0.5);
                 "></div>`,
