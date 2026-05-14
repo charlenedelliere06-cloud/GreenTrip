@@ -528,15 +528,69 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
         <div>
           <label className="block text-sm font-medium text-forest mb-1">
             Tags
-            <span className="text-forest/40 font-normal ml-1">(séparés par des virgules)</span>
           </label>
+
+          {/* Suggestions rapides */}
+          {(() => {
+            const currentTags = tagsInput.split(",").map((t) => t.trim().toLowerCase()).filter(Boolean);
+            const suggestions = ["bio", "vegan", "vrac", "local", "sans gluten", "épices", "fruits & légumes", "cosmétiques"];
+            const available = suggestions.filter((s) => !currentTags.includes(s));
+            if (available.length === 0) return null;
+            return (
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {available.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => {
+                      const tags = tagsInput.split(",").map((t) => t.trim()).filter(Boolean);
+                      tags.push(s);
+                      setTagsInput(tags.join(", "));
+                    }}
+                    className="text-xs px-2.5 py-1 rounded-full border border-dashed border-sage/40 text-sage-dark hover:bg-sage/10 transition-colors"
+                  >
+                    + {s}
+                  </button>
+                ))}
+              </div>
+            );
+          })()}
+
           <input
             type="text"
             value={tagsInput}
             onChange={(e) => setTagsInput(e.target.value)}
             className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
-            placeholder="bio, vegan, vrac, local..."
+            placeholder="Écris tes tags séparés par des virgules..."
           />
+
+          {/* Aperçu des tags */}
+          {(() => {
+            const tags = tagsInput.split(",").map((t) => t.trim()).filter(Boolean);
+            if (tags.length === 0) return null;
+            return (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-1 text-sm bg-beige text-forest/70 px-3 py-1 rounded-full"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = tags.filter((_, idx) => idx !== i);
+                        setTagsInput(updated.join(", "));
+                      }}
+                      className="text-forest/40 hover:text-red-400 transition-colors ml-0.5 leading-none"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                ))}
+              </div>
+            );
+          })()}
         </div>
       </fieldset>
 
