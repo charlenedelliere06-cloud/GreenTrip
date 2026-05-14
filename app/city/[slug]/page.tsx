@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getCityBySlug, getPlacesByCity } from "@/lib/supabase-queries";
+import { getCityBySlug, getPlacesByCity, getPlacesNearbyCity, NearbyPlace } from "@/lib/supabase-queries";
 import { VeganScore } from "@/components/VeganScore";
 import { Map } from "@/components/Map";
 import { CityPlacesSection } from "@/components/CityPlacesSection";
@@ -18,6 +18,7 @@ export default async function CityPage({ params }: CityPageProps) {
   }
 
   const places = await getPlacesByCity(city.id);
+  const nearbyPlaces = await getPlacesNearbyCity(city.id, city.lat, city.lng);
 
   return (
     <div>
@@ -56,6 +57,36 @@ export default async function CityPage({ params }: CityPageProps) {
 
         {/* Lieux avec filtres */}
         <CityPlacesSection places={places} />
+
+        {/* Magasins à proximité */}
+        {nearbyPlaces.length > 0 && (
+          <section className="mt-10">
+            <h2 className="text-xl font-bold text-forest mb-1">Dans les environs</h2>
+            <p className="text-forest/50 text-sm mb-4">Magasins à moins de 80 km de {city.name}</p>
+            <div className="space-y-3">
+              {nearbyPlaces.map((place: NearbyPlace) => (
+                <Link
+                  key={place.id}
+                  href={`/place/${place.id}`}
+                  className="flex items-center justify-between bg-white rounded-xl px-4 py-3.5 shadow-sm hover:shadow-md transition-shadow group"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl">{place.type === "supermarket" ? "🛒" : "🌿"}</span>
+                    <div>
+                      <p className="font-medium text-forest group-hover:text-sage-dark transition-colors">
+                        {place.name}
+                      </p>
+                      <p className="text-sm text-forest/50">{place.cityName}</p>
+                    </div>
+                  </div>
+                  <span className="text-xs text-forest/40 shrink-0 ml-2">
+                    ~{place.distanceKm} km
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Appel à contribution */}
         <section className="mt-10">

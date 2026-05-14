@@ -222,6 +222,67 @@ export async function updateContributionStatus(
   return contribution;
 }
 
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+export interface NearbyPlace extends Place {
+  cityName: string;
+  citySlug: string;
+  distanceKm: number;
+}
+
+export async function getPlacesNearbyCity(
+  excludeCityId: string,
+  cityLat: number,
+  cityLng: number,
+  radiusKm = 80
+): Promise<NearbyPlace[]> {
+  const supabase = await createSupabaseServer();
+
+  // Récupérer toutes les villes dans le rayon sauf la ville courante
+  const { data: allCities } = await supabase.from("cities").select("*");
+  if (!allCities) return [];
+
+  const nearbyCities = allCities.filter((c) => {
+    if (c.id === excludeCityId) return false;
+    return haversineKm(cityLat, cityLng, c.lat, c.lng) <= radiusKm;
+  });
+
+  if (nearbyCities.length === 0) return [];
+
+  const nearbyCityIds = nearbyCities.map((c) => c.id);
+
+  const { data: places, error } = await supabase
+    .from("places")
+    .select("*")
+    .in("city_id", nearbyCityIds)
+    .eq("status", "approved")
+    .order("name");
+
+  if (error || !places) return [];
+
+  return places
+    .map((p) => {
+      const city = nearbyCities.find((c) => c.id === p.city_id)!;
+      return {
+        ...p,
+        cityName: city.name,
+        citySlug: city.slug,
+        distanceKm: Math.round(haversineKm(cityLat, cityLng, city.lat, city.lng)),
+      };
+    })
+    .sort((a, b) => a.distanceKm - b.distanceKm);
+}
+
 export async function getPlaces(): Promise<Place[]> {
   const supabase = await createSupabaseServer();
   const { data, error } = await supabase
