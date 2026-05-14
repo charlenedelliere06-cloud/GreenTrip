@@ -23,7 +23,7 @@ export default async function CityPage({ params }: CityPageProps) {
   return (
     <div>
       {/* Hero ville */}
-      <section className="relative h-64 md:h-80 overflow-hidden">
+      <section className="relative h-56 md:h-72 overflow-hidden">
         {city.image_url ? (
           <img
             src={city.image_url}
@@ -33,13 +33,15 @@ export default async function CityPage({ params }: CityPageProps) {
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-sage to-forest" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-forest/80 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 max-w-6xl mx-auto">
-          <p className="text-beige/80 text-sm">{city.country}</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mt-1">
+        <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/40 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 px-6 pb-7 md:px-12 md:pb-10 max-w-6xl mx-auto">
+          <p className="text-white/60 text-xs font-semibold tracking-[0.25em] uppercase mb-1.5">
+            {city.country}
+          </p>
+          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-none">
             {city.name}
           </h1>
-          <div className="mt-2">
+          <div className="mt-3">
             <VeganScore score={city.vegan_score} size="lg" />
           </div>
         </div>
@@ -47,10 +49,10 @@ export default async function CityPage({ params }: CityPageProps) {
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Description */}
-        <p className="text-forest/80 text-lg max-w-3xl">{city.description}</p>
+        <p className="text-forest text-base md:text-lg max-w-3xl font-medium leading-relaxed">{city.description}</p>
 
         {/* Carte */}
-        <section className="mt-10">
+        <section className="mt-8">
           <h2 className="text-xl font-bold text-forest mb-4">Carte</h2>
           <Map center={[city.lat, city.lng]} places={places} nearbyPlaces={nearbyPlaces} citySlug={city.slug} />
         </section>
