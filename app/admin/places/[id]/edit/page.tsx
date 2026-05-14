@@ -3,11 +3,13 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { uploadPlacePhoto } from "@/lib/storage";
+import { PLACE_TYPE_CONFIG } from "@/lib/place-types";
 
-const placeTypes = [
-  { value: "supermarket", label: "Supermarché", icon: "🛒" },
-  { value: "store", label: "Épicerie bio", icon: "🌿" },
-];
+const placeTypes = Object.entries(PLACE_TYPE_CONFIG).map(([value, v]) => ({
+  value,
+  label: v.label,
+  icon: v.icon,
+}));
 
 export default function EditPlacePage() {
   const { id } = useParams<{ id: string }>();

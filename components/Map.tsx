@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Place } from "@/lib/types";
+import { PLACE_TYPE_CONFIG } from "@/lib/place-types";
 import Link from "next/link";
 
 interface MapProps {
@@ -11,10 +12,12 @@ interface MapProps {
   citySlug?: string;
 }
 
-const typeConfig: Record<string, { color: string; emoji: string; label: string }> = {
-  supermarket: { color: "#f59e0b", emoji: "\uD83D\uDED2", label: "Grande surface" },
-  store: { color: "#10b981", emoji: "\uD83C\uDF3F", label: "Épicerie" },
-};
+const typeConfig: Record<string, { color: string; emoji: string; label: string }> = Object.fromEntries(
+  Object.entries(PLACE_TYPE_CONFIG).map(([key, v]) => [
+    key,
+    { color: v.color, emoji: v.icon, label: v.label },
+  ])
+);
 
 export function Map({ center, places, nearbyPlaces = [], citySlug }: MapProps) {
   const [mounted, setMounted] = useState(false);
@@ -200,8 +203,8 @@ function MapInner({ center, places, nearbyPlaces = [], citySlug }: MapProps) {
         className="w-full h-[500px] rounded-xl z-0"
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
         <MapEventHandler />
 

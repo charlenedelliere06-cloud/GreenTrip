@@ -2,12 +2,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getPlaceById, getCities } from "@/lib/supabase-queries";
 import { PhotoGallery } from "@/components/PhotoGallery";
+import { PLACE_TYPE_CONFIG } from "@/lib/place-types";
 import { ReviewSection } from "@/components/ReviewSection";
 
-const typeLabels: Record<string, string> = {
-  supermarket: "Supermarché",
-  store: "Épicerie",
-};
+
 
 interface PlacePageProps {
   params: Promise<{ id: string }>;
@@ -52,7 +50,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <span className="inline-block text-xs font-medium bg-sage/10 text-sage-dark px-2.5 py-1 rounded-full">
-                {typeLabels[place.type]}
+                {PLACE_TYPE_CONFIG[place.type]?.icon} {PLACE_TYPE_CONFIG[place.type]?.label}
               </span>
               {place.price_range && (
                 <span className="inline-block text-xs font-medium bg-beige text-forest/70 px-2.5 py-1 rounded-full">

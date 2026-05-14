@@ -8,6 +8,7 @@ import { PhotoUpload } from "./PhotoUpload";
 import { LocationPicker, ResolvedAddress } from "./LocationPicker";
 import { AddressAutocomplete } from "./AddressAutocomplete";
 import { uploadPlacePhoto } from "@/lib/storage";
+import { PLACE_TYPE_CONFIG } from "@/lib/place-types";
 
 /* ─── Mini composant : Ville avec Google Places ─── */
 function CityAutocompleteInput({
@@ -92,10 +93,11 @@ interface ContributePlaceFormProps {
   userId: string;
 }
 
-const placeTypes = [
-  { value: "supermarket", label: "Supermarché", icon: "\uD83D\uDED2" },
-  { value: "store", label: "Épicerie bio", icon: "\uD83C\uDF3F" },
-];
+const placeTypes = Object.entries(PLACE_TYPE_CONFIG).map(([value, v]) => ({
+  value,
+  label: v.label,
+  icon: v.icon,
+}));
 
 export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
   const searchParams = useSearchParams();

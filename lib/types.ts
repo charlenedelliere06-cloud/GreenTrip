@@ -14,7 +14,7 @@ export interface Place {
   id: string;
   city_id: string;
   name: string;
-  type: "supermarket" | "store";
+  type: "supermarket" | "store" | "grocery" | "market";
   address: string;
   lat: number;
   lng: number;

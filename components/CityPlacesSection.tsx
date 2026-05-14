@@ -12,6 +12,8 @@ interface CityPlacesSectionProps {
 const typePriority: Record<string, number> = {
   supermarket: 0,
   store: 1,
+  grocery: 2,
+  market: 3,
 };
 
 export function CityPlacesSection({ places }: CityPlacesSectionProps) {

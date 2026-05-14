@@ -1,15 +1,6 @@
 import Link from "next/link";
 import { Place } from "@/lib/types";
-
-const typeLabels: Record<Place["type"], string> = {
-  supermarket: "Supermarché",
-  store: "Épicerie bio",
-};
-
-const typeColors: Record<Place["type"], string> = {
-  supermarket: "bg-amber-50 text-amber-700",
-  store: "bg-emerald-50 text-emerald-700",
-};
+import { PLACE_TYPE_CONFIG } from "@/lib/place-types";
 
 interface PlaceCardProps {
   place: Place;
@@ -43,9 +34,9 @@ export function PlaceCard({ place }: PlaceCardProps) {
                 <p className="text-sm text-forest/60 mt-0.5">{place.address}</p>
               </div>
               <span
-                className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${typeColors[place.type]}`}
+                className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${PLACE_TYPE_CONFIG[place.type]?.pastelBg} ${PLACE_TYPE_CONFIG[place.type]?.pastelText}`}
               >
-                {typeLabels[place.type]}
+                {PLACE_TYPE_CONFIG[place.type]?.icon} {PLACE_TYPE_CONFIG[place.type]?.label}
               </span>
             </div>
             <p className="text-sm text-forest/80 mt-2 line-clamp-2">

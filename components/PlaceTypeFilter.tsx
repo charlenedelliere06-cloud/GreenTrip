@@ -1,11 +1,15 @@
 "use client";
 
 import { Place } from "@/lib/types";
+import { PLACE_TYPE_CONFIG } from "@/lib/place-types";
 
 const typeConfig = [
-  { value: "all", label: "Tous", icon: "\uD83D\uDCCD" },
-  { value: "supermarket", label: "Supermarchés", icon: "\uD83D\uDED2" },
-  { value: "store", label: "Épiceries bio", icon: "\uD83C\uDF3F" },
+  { value: "all", label: "Tous", icon: "📍" },
+  ...Object.entries(PLACE_TYPE_CONFIG).map(([value, v]) => ({
+    value,
+    label: v.label,
+    icon: v.icon,
+  })),
 ];
 
 interface PlaceTypeFilterProps {
