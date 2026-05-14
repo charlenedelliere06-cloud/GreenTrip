@@ -7,6 +7,7 @@ import Link from "next/link";
 interface MapProps {
   center: [number, number];
   places: Place[];
+  nearbyPlaces?: Place[];
   citySlug?: string;
 }
 
@@ -15,7 +16,7 @@ const typeConfig: Record<string, { color: string; emoji: string; label: string }
   store: { color: "#10b981", emoji: "\uD83C\uDF3F", label: "Épicerie" },
 };
 
-export function Map({ center, places, citySlug }: MapProps) {
+export function Map({ center, places, nearbyPlaces = [], citySlug }: MapProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -30,10 +31,10 @@ export function Map({ center, places, citySlug }: MapProps) {
     );
   }
 
-  return <MapInner center={center} places={places} citySlug={citySlug} />;
+  return <MapInner center={center} places={places} nearbyPlaces={nearbyPlaces} citySlug={citySlug} />;
 }
 
-function MapInner({ center, places, citySlug }: MapProps) {
+function MapInner({ center, places, nearbyPlaces = [], citySlug }: MapProps) {
   const {
     MapContainer,
     TileLayer,
@@ -83,6 +84,29 @@ function MapInner({ center, places, citySlug }: MapProps) {
       iconSize: [36, 36],
       iconAnchor: [18, 18],
       popupAnchor: [0, -20],
+    });
+  }, [L]);
+
+  const createNearbyIcon = useCallback((color: string, emoji: string) => {
+    return L.divIcon({
+      className: "custom-marker-nearby",
+      html: `<div style="
+        background: ${color};
+        opacity: 0.65;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        border: 2px dashed white;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        cursor: pointer;
+      ">${emoji}</div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      popupAnchor: [0, -16],
     });
   }, [L]);
 
@@ -229,6 +253,53 @@ function MapInner({ center, places, citySlug }: MapProps) {
                       fontSize: 12,
                       fontWeight: 600,
                       textDecoration: "none",
+                    }}
+                  >
+                    Voir le lieu
+                  </a>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
+
+        {/* Nearby place markers */}
+        {nearbyPlaces.map((place) => {
+          const cfg = typeConfig[place.type] || typeConfig.store;
+          return (
+            <Marker
+              key={`nearby-${place.id}`}
+              position={[place.lat, place.lng]}
+              icon={createNearbyIcon(cfg.color, cfg.emoji)}
+            >
+              <Popup>
+                <div style={{ minWidth: 200, maxWidth: 260 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                    <span style={{
+                      background: "#9CA3AF",
+                      color: "white",
+                      fontSize: 10,
+                      fontWeight: 600,
+                      padding: "2px 8px",
+                      borderRadius: 99,
+                    }}>
+                      📍 Aux alentours
+                    </span>
+                  </div>
+                  <strong style={{ fontSize: 15, color: "#2D4A2D" }}>{place.name}</strong>
+                  <p style={{ fontSize: 12, color: "#666", margin: "4px 0" }}>{place.address}</p>
+                  <a
+                    href={`/place/${place.id}`}
+                    style={{
+                      display: "inline-block",
+                      background: "#9CAF88",
+                      color: "white",
+                      padding: "6px 14px",
+                      borderRadius: 8,
+                      fontSize: 12,
+                      fontWeight: 600,
+                      textDecoration: "none",
+                      marginTop: 8,
                     }}
                   >
                     Voir le lieu
