@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { getCityBySlug, getPlacesByCity, getTipsByCity } from "@/lib/supabase-queries";
+import Link from "next/link";
+import { getCityBySlug, getPlacesByCity } from "@/lib/supabase-queries";
 import { VeganScore } from "@/components/VeganScore";
-import { TipCard } from "@/components/TipCard";
 import { Map } from "@/components/Map";
 import { CityPlacesSection } from "@/components/CityPlacesSection";
 
@@ -18,7 +18,6 @@ export default async function CityPage({ params }: CityPageProps) {
   }
 
   const places = await getPlacesByCity(city.id);
-  const tips = await getTipsByCity(city.id);
 
   return (
     <div>
@@ -58,24 +57,25 @@ export default async function CityPage({ params }: CityPageProps) {
         {/* Lieux avec filtres */}
         <CityPlacesSection places={places} />
 
-        {/* Tips */}
+        {/* Appel à contribution */}
         <section className="mt-10">
-          <h2 className="text-xl font-bold text-forest mb-4">
-            Tips & pièges
-          </h2>
-          {tips.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {tips.map((tip) => (
-                <TipCard key={tip.id} tip={tip} />
-              ))}
+          <div className="bg-gradient-to-br from-sage/10 to-beige rounded-2xl p-7 flex flex-col sm:flex-row items-center gap-5">
+            <div className="text-4xl">🌿</div>
+            <div className="flex-1 text-center sm:text-left">
+              <h3 className="text-lg font-bold text-forest">
+                Tu connais une bonne adresse à {city.name} ?
+              </h3>
+              <p className="text-forest/60 text-sm mt-1">
+                Magasin entièrement vegan, épicerie bio ou supermarché avec un bon rayon vegan — partage-le avec la communauté !
+              </p>
             </div>
-          ) : (
-            <div className="text-center py-10 bg-beige/30 rounded-2xl">
-              <p className="text-3xl mb-3">💡</p>
-              <p className="text-forest font-medium">Pas encore de tips pour cette ville</p>
-              <p className="text-forest/50 text-sm mt-1">Les astuces de la communauté apparaîtront ici.</p>
-            </div>
-          )}
+            <Link
+              href="/contribute"
+              className="flex-shrink-0 bg-sage text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-sage-dark transition-colors"
+            >
+              Ajouter un lieu
+            </Link>
+          </div>
         </section>
       </div>
     </div>
