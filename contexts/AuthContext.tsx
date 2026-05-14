@@ -12,6 +12,8 @@ interface AuthContextType {
   signUpWithEmail: (email: string, password: string, displayName: string) => Promise<{ error?: string }>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<{ error?: string }>;
+  updatePassword: (newPassword: string) => Promise<{ error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -22,6 +24,8 @@ const AuthContext = createContext<AuthContextType>({
   signUpWithEmail: async () => ({}),
   signInWithGoogle: async () => {},
   signOut: async () => {},
+  resetPassword: async () => ({}),
+  updatePassword: async () => ({}),
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -88,6 +92,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await supabase.auth.signOut();
   };
 
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    });
+    if (error) return { error: error.message };
+    return {};
+  };
+
+  const updatePassword = async (newPassword: string) => {
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) return { error: error.message };
+    return {};
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -98,6 +116,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signUpWithEmail,
         signInWithGoogle,
         signOut,
+        resetPassword,
+        updatePassword,
       }}
     >
       {children}

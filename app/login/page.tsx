@@ -18,10 +18,31 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signInWithEmail, signInWithGoogle } = useAuth();
+
+  // Mot de passe oublié
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotSuccess, setForgotSuccess] = useState(false);
+  const [forgotError, setForgotError] = useState("");
+
+  const { signInWithEmail, signInWithGoogle, resetPassword } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/";
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotError("");
+    setForgotLoading(true);
+    const result = await resetPassword(forgotEmail);
+    setForgotLoading(false);
+    if (result.error) {
+      setForgotError("Une erreur est survenue. Vérifie ton adresse email.");
+    } else {
+      setForgotSuccess(true);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,9 +120,18 @@ function LoginForm() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-forest mb-1">
-                Mot de passe
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-sm font-medium text-forest">
+                  Mot de passe
+                </label>
+                <button
+                  type="button"
+                  onClick={() => { setShowForgot(!showForgot); setForgotSuccess(false); setForgotError(""); }}
+                  className="text-xs text-sage-dark hover:underline"
+                >
+                  Mot de passe oublié ?
+                </button>
+              </div>
               <input
                 type="password"
                 value={password}
@@ -111,6 +141,41 @@ function LoginForm() {
                 placeholder="••••••••"
               />
             </div>
+
+            {/* Formulaire mot de passe oublié */}
+            {showForgot && (
+              <div className="bg-beige/50 rounded-xl p-4 space-y-3">
+                {forgotSuccess ? (
+                  <p className="text-sm text-sage-dark font-medium text-center">
+                    ✅ Email envoyé ! Vérifie ta boîte mail pour réinitialiser ton mot de passe.
+                  </p>
+                ) : (
+                  <form onSubmit={handleForgotPassword} className="space-y-3">
+                    <p className="text-sm text-forest/70">
+                      Entre ton adresse email et on t&apos;envoie un lien pour créer un nouveau mot de passe.
+                    </p>
+                    <input
+                      type="email"
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                      required
+                      className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-white text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage text-sm"
+                      placeholder="ton@email.com"
+                    />
+                    {forgotError && (
+                      <p className="text-xs text-red-600">{forgotError}</p>
+                    )}
+                    <button
+                      type="submit"
+                      disabled={forgotLoading}
+                      className="w-full bg-sage text-white py-2 rounded-xl text-sm font-medium hover:bg-sage-dark transition-colors disabled:opacity-50"
+                    >
+                      {forgotLoading ? "Envoi..." : "Envoyer le lien"}
+                    </button>
+                  </form>
+                )}
+              </div>
+            )}
 
             {error && (
               <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">
