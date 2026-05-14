@@ -252,12 +252,20 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
         <p className="text-forest/60 mt-2">
           Ton lieu sera vérifié par notre équipe avant d&apos;être publié.
         </p>
-        <button
-          onClick={resetForm}
-          className="mt-6 bg-sage text-white px-6 py-2.5 rounded-xl font-medium hover:bg-sage-dark transition-colors"
-        >
-          Ajouter un autre lieu
-        </button>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
+          <button
+            onClick={resetForm}
+            className="bg-sage text-white px-6 py-2.5 rounded-xl font-medium hover:bg-sage-dark transition-colors"
+          >
+            Ajouter un autre lieu
+          </button>
+          <a
+            href="/my-contributions"
+            className="bg-beige text-forest px-6 py-2.5 rounded-xl font-medium hover:bg-beige-dark transition-colors"
+          >
+            Voir mes contributions
+          </a>
+        </div>
       </div>
     );
   }
