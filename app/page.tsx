@@ -5,7 +5,6 @@ import { getCities } from "@/lib/supabase-queries";
 
 export default async function HomePage() {
   const cities = await getCities();
-  const trendingCities = cities.filter((c) => c.image_url);
 
   return (
     <div>
@@ -35,16 +34,29 @@ export default async function HomePage() {
       </section>
 
       {/* Destinations */}
-      <section className="max-w-6xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold text-forest mb-2">
-          Explore une ville
-        </h2>
-        <p className="text-forest/50 mb-6">
-          Trouve les supermarch&eacute;s et &eacute;piceries vegan pr&egrave;s de ta destination.
-        </p>
+      <section className="max-w-6xl mx-auto px-4 py-14">
+        <div className="mb-10">
+          <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-sage mb-3">
+            Destinations
+          </span>
+          <h2 className="text-3xl font-bold text-forest leading-tight">
+            Explore une ville
+          </h2>
+          <p className="text-sm text-forest/50 mt-2">
+            S&eacute;lectionne une destination pour voir ses adresses vegan.
+          </p>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {trendingCities.map((city) => (
-            <CityCard key={city.id} city={city} />
+          {cities.map((city, i) => (
+            <div
+              key={city.id}
+              style={{
+                animation: "fade-up 0.5s ease-out both",
+                animationDelay: `${i * 100}ms`,
+              }}
+            >
+              <CityCard city={city} />
+            </div>
           ))}
         </div>
       </section>
