@@ -10,17 +10,24 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-gradient-to-b from-sage/10 to-offwhite pt-20 pb-16 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-forest leading-tight">
-            Voyagez <span className="text-sage">vegan</span>,<br />
+      <section className="bg-forest pt-20 pb-20 px-4 relative overflow-hidden">
+        {/* Cercles décoratifs en arrière-plan */}
+        <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-sage/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-10 -left-20 w-72 h-72 rounded-full bg-sage/10 blur-3xl pointer-events-none" />
+
+        <div className="max-w-3xl mx-auto text-center relative">
+          <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-sage-light mb-6">
+            Le guide vegan du voyageur
+          </span>
+          <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tight">
+            Voyagez <span className="text-sage-light">vegan</span>,<br />
             partout dans le monde
           </h1>
-          <p className="mt-4 text-forest/60 text-lg max-w-xl mx-auto">
+          <p className="mt-6 text-white/60 text-lg max-w-xl mx-auto leading-relaxed">
             Supermarchés, épiceries et bons plans pour trouver des produits vegan
             partout où tu voyages.
           </p>
-          <div className="mt-8">
+          <div className="mt-10">
             <SearchBar />
             <GeolocateButton />
           </div>

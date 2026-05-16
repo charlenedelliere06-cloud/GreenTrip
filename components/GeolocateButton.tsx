@@ -69,19 +69,19 @@ export function GeolocateButton() {
       <button
         onClick={handleGeolocate}
         disabled={locating}
-        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-beige-dark text-forest text-sm font-medium hover:bg-beige/50 hover:border-sage/50 transition-all disabled:opacity-50 shadow-sm"
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/15 border border-white/30 text-white/80 text-sm font-medium hover:bg-white/25 hover:text-white transition-all disabled:opacity-50"
       >
         {locating ? (
-          <span className="w-4 h-4 border-2 border-forest/30 border-t-forest rounded-full animate-spin" />
+          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
         ) : (
-          <svg className="w-4 h-4 text-sage" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-4 h-4 text-sage-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v2m0 16v2M2 12h2m16 0h2m-3.636-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m0-11.314l1.414 1.414m9.9 9.9l1.414 1.414M12 8a4 4 0 100 8 4 4 0 000-8z" />
           </svg>
         )}
         {locating ? "Localisation..." : "Utiliser ma position"}
       </button>
       {error && (
-        <p className="text-xs text-red-500 mt-2">{error}</p>
+        <p className="text-xs text-red-300 mt-2">{error}</p>
       )}
     </div>
   );
