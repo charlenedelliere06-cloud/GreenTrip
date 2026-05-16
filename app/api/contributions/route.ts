@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createContribution, getContributions } from "@/lib/supabase-queries";
+import { sendContributionReceivedEmail } from "@/lib/resend";
 
 export async function POST(request: Request) {
   try {
@@ -14,6 +15,15 @@ export async function POST(request: Request) {
     }
 
     const contribution = await createContribution(body);
+
+    // Envoyer l'email de confirmation à l'utilisateur
+    if (body.user_id) {
+      await sendContributionReceivedEmail(
+        body.user_id,
+        body.place_name,
+        body.city_name || "ta ville"
+      );
+    }
 
     return NextResponse.json({ success: true, contribution });
   } catch (err) {
