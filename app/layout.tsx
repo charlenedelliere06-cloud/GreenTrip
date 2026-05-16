@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import Link from "next/link";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/Navbar";
 import "./globals.css";
@@ -25,22 +26,69 @@ export default function RootLayout({
         <AuthProvider>
           <Navbar />
           <main className="min-h-screen">{children}</main>
-          <footer className="bg-forest text-beige py-10 mt-16">
-            <div className="max-w-6xl mx-auto px-4">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-                <div className="text-center sm:text-left">
-                  <p className="font-bold text-lg">Green<span className="text-sage-light">Trip</span></p>
-                  <p className="text-sm opacity-60 mt-1">Ne perds plus de temps à chercher des produits vegan en voyage.</p>
+          <footer className="bg-forest text-white mt-16">
+            <div className="max-w-6xl mx-auto px-4 py-12">
+
+              {/* Grille 3 colonnes */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 mb-10">
+
+                {/* Colonne 1 : Marque */}
+                <div>
+                  <p className="text-xl font-bold tracking-tight">
+                    Green<span className="text-sage-light">Trip</span>
+                  </p>
+                  <p className="text-sm text-white/50 mt-3 leading-relaxed">
+                    Le guide vegan du voyageur — trouve des produits partout dans le monde.
+                  </p>
                 </div>
-                <div className="flex gap-6 text-sm opacity-80">
-                  <a href="/" className="hover:text-white transition-colors">Explorer</a>
-                  <a href="/login?redirect=/contribute" className="hover:text-white transition-colors">Contribuer</a>
-                  <a href="/login" className="hover:text-white transition-colors">Se connecter</a>
+
+                {/* Colonne 2 : Navigation */}
+                <div>
+                  <p className="text-xs font-semibold tracking-[0.15em] uppercase text-white/30 mb-4">
+                    Navigation
+                  </p>
+                  <ul className="space-y-2.5 text-sm">
+                    <li>
+                      <Link href="/" className="text-white/60 hover:text-white transition-colors">
+                        Explorer les villes
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/login?redirect=/contribute" className="text-white/60 hover:text-white transition-colors">
+                        Contribuer
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/my-contributions" className="text-white/60 hover:text-white transition-colors">
+                        Mes contributions
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/login" className="text-white/60 hover:text-white transition-colors">
+                        Se connecter
+                      </Link>
+                    </li>
+                  </ul>
                 </div>
+
+                {/* Colonne 3 : Mission */}
+                <div>
+                  <p className="text-xs font-semibold tracking-[0.15em] uppercase text-white/30 mb-4">
+                    Notre mission
+                  </p>
+                  <p className="text-sm text-white/50 leading-relaxed">
+                    Rendre le voyage vegan simple et accessible pour tous, partout dans le monde.
+                  </p>
+                </div>
+
               </div>
-              <div className="border-t border-beige/20 mt-6 pt-6 text-center text-xs opacity-50">
-                <p>Fait avec des plantes, pour la planète.</p>
+
+              {/* Ligne de séparation + bas de page */}
+              <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/25">
+                <p>&copy; 2025 GreenTrip &mdash; Fait avec des plantes, pour la plan&egrave;te.</p>
+                <p className="text-sage-light/60">&#127807;</p>
               </div>
+
             </div>
           </footer>
         </AuthProvider>
