@@ -65,23 +65,24 @@ export function GeolocateButton() {
   };
 
   return (
-    <div className="mt-4">
+    <div className="mt-5 flex flex-col items-center gap-1">
       <button
         onClick={handleGeolocate}
         disabled={locating}
-        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/15 border border-white/30 text-white/80 text-sm font-medium hover:bg-white/25 hover:text-white transition-all disabled:opacity-50"
+        className="inline-flex items-center gap-1.5 text-sm text-forest/35 hover:text-forest/60 transition-colors disabled:opacity-40"
       >
         {locating ? (
-          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          <span className="w-3 h-3 border border-forest/30 border-t-forest/60 rounded-full animate-spin" />
         ) : (
-          <svg className="w-4 h-4 text-sage-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v2m0 16v2M2 12h2m16 0h2m-3.636-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m0-11.314l1.414 1.414m9.9 9.9l1.414 1.414M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         )}
-        {locating ? "Localisation..." : "Utiliser ma position"}
+        {locating ? "Localisation en cours..." : "Utiliser ma position"}
       </button>
       {error && (
-        <p className="text-xs text-red-300 mt-2">{error}</p>
+        <p className="text-xs text-red-400">{error}</p>
       )}
     </div>
   );

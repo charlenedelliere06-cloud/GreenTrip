@@ -25,7 +25,7 @@ export default function RootLayout({
         />
         <AuthProvider>
           <Navbar />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen pt-20">{children}</main>
           <footer className="bg-forest text-white mt-16">
             <div className="max-w-6xl mx-auto px-4 py-12">
 
