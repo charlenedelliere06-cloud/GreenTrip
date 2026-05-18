@@ -3,35 +3,25 @@ import { GeolocateButton } from "@/components/GeolocateButton"
 
 export function HeroSection() {
   return (
-    <section className="min-h-[85vh] bg-cream flex flex-col items-center justify-center px-6 py-24">
-      <div className="max-w-2xl w-full text-center space-y-8">
-
-        <p
-          className="text-xs tracking-[0.25em] uppercase text-stone-muted font-medium"
-          style={{ animation: "fade-up 0.7s ease-out both", animationDelay: "0ms" }}
-        >
-          Le guide vegan du voyageur
-        </p>
+    <section className="bg-cream px-6 pt-14 pb-16">
+      <div className="max-w-xl mx-auto text-center">
 
         <h1
-          className="text-4xl sm:text-5xl md:text-6xl font-light text-stone leading-[1.1] tracking-tight"
-          style={{ animation: "fade-up 0.7s ease-out both", animationDelay: "120ms" }}
+          className="text-4xl sm:text-5xl font-bold text-stone leading-tight mb-3 text-balance"
+          style={{ animation: "fade-up 0.6s ease-out both", animationDelay: "0ms" }}
         >
-          Voyagez{" "}
-          <em className="font-serif italic text-sage-dark">vegan</em>
-          , partout dans le monde
+          Voyagez <span className="text-sage-dark">vegan</span>, partout dans le monde
         </h1>
 
         <p
-          className="text-base sm:text-lg text-stone-muted font-light max-w-md mx-auto leading-relaxed"
-          style={{ animation: "fade-up 0.7s ease-out both", animationDelay: "240ms" }}
+          className="text-sm text-stone-muted mb-8"
+          style={{ animation: "fade-up 0.6s ease-out both", animationDelay: "100ms" }}
         >
-          Supermarch&eacute;s, &eacute;piceries et bons plans pour tes voyages vegan.
+          Supermarch&eacute;s, &eacute;piceries et march&eacute;s bio pr&egrave;s de ta destination.
         </p>
 
         <div
-          className="pt-4"
-          style={{ animation: "fade-up 0.7s ease-out both", animationDelay: "360ms" }}
+          style={{ animation: "fade-up 0.6s ease-out both", animationDelay: "200ms" }}
         >
           <SearchBar />
           <GeolocateButton />
