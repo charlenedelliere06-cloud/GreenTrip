@@ -11,6 +11,14 @@
   --color-forest-light: #3D6A3D;
 
   --font-sans: "Inter", "system-ui", "sans-serif";
+  --font-serif: var(--font-playfair), "Georgia", serif;
+
+  /* Couleurs v0 */
+  --color-cream: oklch(0.98 0.015 85);
+  --color-stone: oklch(0.35 0.02 60);
+  --color-stone-muted: oklch(0.55 0.02 60);
+  --color-sage-foreground: oklch(0.98 0.01 145);
+  --color-terracotta: oklch(0.65 0.12 45);
 
   --animate-fade-in: fade-in 0.3s ease-out;
   --animate-fade-up: fade-up 0.5s ease-out both;

@@ -1,5 +1,4 @@
-import { SearchBar } from "@/components/SearchBar";
-import { GeolocateButton } from "@/components/GeolocateButton";
+import { HeroSection } from "@/components/HeroSection";
 import { CityCard } from "@/components/CityCard";
 import { getCities } from "@/lib/supabase-queries";
 
@@ -8,46 +7,7 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* Hero */}
-      <section
-        className="pt-16 pb-24 px-4"
-        style={{ background: "linear-gradient(160deg, #faf9f6 0%, #edf3e8 100%)" }}
-      >
-        <div className="max-w-2xl mx-auto text-center">
-
-          <p
-            className="text-xs tracking-[0.25em] uppercase text-forest/30 font-medium mb-8"
-            style={{ animation: "fade-up 0.7s ease-out both", animationDelay: "0ms" }}
-          >
-            Le guide vegan du voyageur
-          </p>
-
-          <h1
-            className="text-5xl md:text-6xl font-bold text-forest leading-tight mb-6"
-            style={{ animation: "fade-up 0.7s ease-out both", animationDelay: "130ms" }}
-          >
-            Voyagez{" "}
-            <em className="not-italic text-sage-dark italic">vegan</em>,<br />
-            partout dans le monde
-          </h1>
-
-          <p
-            className="text-forest/40 text-base max-w-sm mx-auto leading-relaxed mb-10"
-            style={{ animation: "fade-up 0.7s ease-out both", animationDelay: "260ms" }}
-          >
-            Supermarch&eacute;s, &eacute;piceries et bons plans pour tes voyages vegan.
-          </p>
-
-          <div style={{ animation: "fade-up 0.7s ease-out both", animationDelay: "380ms" }}>
-            <SearchBar />
-          </div>
-
-          <div style={{ animation: "fade-up 0.7s ease-out both", animationDelay: "460ms" }}>
-            <GeolocateButton />
-          </div>
-
-        </div>
-      </section>
+      <HeroSection />
 
       {/* Destinations */}
       <section className="max-w-6xl mx-auto px-4 py-14">

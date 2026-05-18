@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import Link from "next/link";
+import { Playfair_Display } from "next/font/google";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/Navbar";
 import "./globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-playfair",
+});
 
 export const metadata: Metadata = {
   title: "GreenTrip — Guide de voyage vegan",
@@ -18,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className="bg-offwhite text-forest font-sans antialiased">
+      <body className={`${playfair.variable} bg-offwhite text-forest font-sans antialiased`}>
         <Script
           src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY}&libraries=places`}
           strategy="afterInteractive"

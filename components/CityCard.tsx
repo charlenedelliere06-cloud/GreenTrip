@@ -21,7 +21,7 @@ export function CityCard({ city }: CityCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           {/* Score vegan */}
           <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full">
-            <VeganScore score={city.vegan_score} size="sm" />
+            <VeganScore score={city.vegan_score} size="sm" showLabel={false} />
           </div>
           {/* Nom de la ville sur la photo */}
           <div className="absolute bottom-0 left-0 right-0 p-4">
