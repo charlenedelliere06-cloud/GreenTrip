@@ -24,6 +24,7 @@ export interface Place {
   photos: string[];
   price_range?: number | null; // 1=€  2=€€  3=€€€
   added_by?: string;
+  added_by_name?: string;
   created_at?: string;
 }
 

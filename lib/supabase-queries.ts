@@ -211,6 +211,7 @@ export async function updateContributionStatus(
       price_range: contribution.place_price_range || null,
       status: "approved",
       added_by: contribution.user_id,
+      added_by_name: contribution.user_display_name || null,
     });
 
     if (placeError) {

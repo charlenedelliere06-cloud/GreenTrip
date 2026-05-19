@@ -86,8 +86,33 @@ export default async function PlacePage({ params }: PlacePageProps) {
           ))}
         </div>
 
+        {/* Contributeur */}
+        {(place.added_by_name || place.created_at) && (
+          <div className="mt-6 pt-5 border-t border-beige-dark flex items-center gap-2 text-xs text-forest/40">
+            <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span>
+              Ajouté
+              {place.added_by_name && (
+                <span className="font-medium text-forest/60"> par {place.added_by_name}</span>
+              )}
+              {place.created_at && (
+                <span>
+                  {" "}le{" "}
+                  {new Date(place.created_at).toLocaleDateString("fr-FR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </span>
+              )}
+            </span>
+          </div>
+        )}
+
         {/* Actions */}
-        <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-beige-dark">
+        <div className="flex flex-wrap gap-3 mt-5 pt-5 border-t border-beige-dark">
           {place.google_maps_url && (
             <a
               href={place.google_maps_url}
