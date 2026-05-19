@@ -7,14 +7,14 @@ export function HeroSection() {
       <div className="max-w-xl mx-auto text-center">
 
         <h1
-          className="text-4xl sm:text-5xl font-bold text-stone leading-tight mb-3 text-balance"
+          className="text-4xl sm:text-5xl font-bold text-forest leading-tight mb-3 text-balance"
           style={{ animation: "fade-up 0.6s ease-out both", animationDelay: "0ms" }}
         >
           Voyagez <span className="text-sage-dark">vegan</span>, partout dans le monde
         </h1>
 
         <p
-          className="text-sm text-stone-muted mb-8"
+          className="text-sm text-forest/60 mb-8"
           style={{ animation: "fade-up 0.6s ease-out both", animationDelay: "100ms" }}
         >
           Supermarch&eacute;s, &eacute;piceries et march&eacute;s bio pr&egrave;s de ta destination.

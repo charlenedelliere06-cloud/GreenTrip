@@ -62,8 +62,8 @@ export default function MyContributionsPage() {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center">
         <p className="text-3xl mb-3">🔒</p>
-        <h1 className="text-xl font-bold text-stone">Connecte-toi</h1>
-        <p className="text-stone-muted mt-2">
+        <h1 className="text-xl font-bold text-forest">Connecte-toi</h1>
+        <p className="text-forest/60 mt-2">
           Tu dois être connecté pour voir tes contributions.
         </p>
         <Link
@@ -78,16 +78,16 @@ export default function MyContributionsPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-stone">Mes contributions</h1>
-      <p className="text-stone-muted mt-1">
+      <h1 className="text-2xl font-bold text-forest">Mes contributions</h1>
+      <p className="text-forest/60 mt-1">
         Suis le statut de tes suggestions de lieux.
       </p>
 
       {contributions.length === 0 ? (
         <div className="mt-8 bg-white rounded-xl p-8 shadow-sm text-center">
           <p className="text-3xl mb-3">🌱</p>
-          <p className="text-stone font-medium">Aucune contribution pour le moment</p>
-          <p className="text-stone-muted mt-2 text-sm">
+          <p className="text-forest font-medium">Aucune contribution pour le moment</p>
+          <p className="text-forest/60 mt-2 text-sm">
             Partage tes bonnes adresses vegan avec la communauté !
           </p>
           <Link
@@ -105,14 +105,14 @@ export default function MyContributionsPage() {
               <div key={c.id} className="bg-white rounded-xl p-4 shadow-sm">
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-stone truncate">
+                    <h3 className="font-semibold text-forest truncate">
                       {c.place_name}
                     </h3>
-                    <p className="text-sm text-stone-muted mt-0.5">
+                    <p className="text-sm text-forest/60 mt-0.5">
                       {typeLabels[c.place_type] || c.place_type}
                       {c.city_name && ` · ${c.city_name}`}
                     </p>
-                    <p className="text-xs text-stone-muted mt-1">
+                    <p className="text-xs text-forest/60 mt-1">
                       {new Date(c.created_at).toLocaleDateString("fr-FR")}
                     </p>
                   </div>

@@ -80,7 +80,7 @@ function CityAutocompleteInput({
       type="text"
       defaultValue={value}
       onChange={(e) => onChange(e.target.value)}
-      className={`w-full px-4 py-2.5 rounded-xl border text-stone focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
+      className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
         autoFilled && value ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
       }`}
       placeholder="Ex: Paris, Bangkok, Berlin..."
@@ -250,8 +250,8 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
     return (
       <div className="bg-white rounded-2xl p-8 shadow-sm text-center mt-6">
         <div className="text-4xl mb-4">🎉</div>
-        <h2 className="text-xl font-bold text-stone">Merci pour ta contribution !</h2>
-        <p className="text-stone-muted mt-2">
+        <h2 className="text-xl font-bold text-forest">Merci pour ta contribution !</h2>
+        <p className="text-forest/60 mt-2">
           Ton lieu sera vérifié par notre équipe avant d&apos;être publié.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
@@ -263,7 +263,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
           </button>
           <a
             href="/my-contributions"
-            className="bg-beige text-stone px-6 py-2.5 rounded-full font-medium hover:bg-beige-dark transition-colors"
+            className="bg-beige text-forest px-6 py-2.5 rounded-full font-medium hover:bg-beige-dark transition-colors"
           >
             Voir mes contributions
           </a>
@@ -276,14 +276,14 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
     <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-sm mt-6">
       {/* === SECTION 1 : Quoi ? === */}
       <fieldset className="space-y-4">
-        <legend className="text-base font-bold text-stone flex items-center gap-2 mb-3">
+        <legend className="text-base font-bold text-forest flex items-center gap-2 mb-3">
           <span className="w-6 h-6 rounded-full bg-sage text-white text-xs flex items-center justify-center font-bold">1</span>
           Quel est ce lieu ?
         </legend>
 
         {/* Nom */}
         <div>
-          <label className="block text-sm font-medium text-stone mb-1">
+          <label className="block text-sm font-medium text-forest mb-1">
             Nom du lieu
           </label>
           <input
@@ -291,14 +291,14 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-stone focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
+            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
             placeholder="Ex: Whole Foods Market, Veganz..."
           />
         </div>
 
         {/* Type */}
         <div>
-          <label className="block text-sm font-medium text-stone mb-2">
+          <label className="block text-sm font-medium text-forest mb-2">
             Type de lieu
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -310,7 +310,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
                 className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all ${
                   type === pt.value
                     ? "bg-sage text-white border-sage shadow-sm"
-                    : "bg-offwhite text-stone-muted border-beige-dark hover:border-sage/50"
+                    : "bg-offwhite text-forest/60 border-beige-dark hover:border-sage/50"
                 }`}
               >
                 <span>{pt.icon}</span>
@@ -322,9 +322,9 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
 
         {/* Gamme de prix */}
         <div>
-          <label className="block text-sm font-medium text-stone mb-2">
+          <label className="block text-sm font-medium text-forest mb-2">
             Gamme de prix
-            <span className="text-stone-muted font-normal ml-1">(optionnel)</span>
+            <span className="text-forest/60 font-normal ml-1">(optionnel)</span>
           </label>
           <div className="flex gap-2">
             {[
@@ -339,7 +339,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
                 className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-all flex flex-col items-center gap-0.5 ${
                   priceRange === p.value
                     ? "bg-sage text-white border-sage shadow-sm"
-                    : "bg-offwhite text-stone-muted border-beige-dark hover:border-sage/50"
+                    : "bg-offwhite text-forest/60 border-beige-dark hover:border-sage/50"
                 }`}
               >
                 <span className="font-bold">{p.label}</span>
@@ -351,7 +351,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-stone mb-1">
+          <label className="block text-sm font-medium text-forest mb-1">
             Description
           </label>
           <textarea
@@ -360,10 +360,10 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
             required
             maxLength={500}
             rows={3}
-            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-stone focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage resize-none"
+            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage resize-none"
             placeholder="Qu'est-ce qu'on y trouve ? Pourquoi c'est bien pour les vegans ?"
           />
-          <p className="text-xs text-stone-muted text-right mt-1">
+          <p className="text-xs text-forest/60 text-right mt-1">
             {description.length}/500
           </p>
         </div>
@@ -373,14 +373,14 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
 
       {/* === SECTION 2 : Où ? === */}
       <fieldset className="space-y-4">
-        <legend className="text-base font-bold text-stone flex items-center gap-2 mb-3">
+        <legend className="text-base font-bold text-forest flex items-center gap-2 mb-3">
           <span className="w-6 h-6 rounded-full bg-sage text-white text-xs flex items-center justify-center font-bold">2</span>
           Où se trouve le lieu ?
         </legend>
 
         {/* Localisation carte */}
         <div>
-          <p className="text-sm text-stone-muted mb-2">
+          <p className="text-sm text-forest/60 mb-2">
             Utilise ta position ou clique sur la carte — la ville, le pays et l&apos;adresse se rempliront automatiquement.
           </p>
           <LocationPicker
@@ -395,15 +395,15 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
         {/* Séparateur "ou" */}
         <div className="flex items-center gap-3">
           <div className="flex-1 h-px bg-beige-dark" />
-          <span className="text-xs text-stone-muted font-medium">ou remplis manuellement</span>
+          <span className="text-xs text-forest/60 font-medium">ou remplis manuellement</span>
           <div className="flex-1 h-px bg-beige-dark" />
         </div>
 
         {/* Adresse avec autocomplete Google */}
         <div>
-          <label className="block text-sm font-medium text-stone mb-1">
+          <label className="block text-sm font-medium text-forest mb-1">
             Adresse
-            <span className="text-stone-muted font-normal ml-1">(optionnel)</span>
+            <span className="text-forest/60 font-normal ml-1">(optionnel)</span>
           </label>
           <AddressAutocomplete
             value={address}
@@ -437,7 +437,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Ville — Google Places Autocomplete */}
           <div className="relative">
-            <label className="block text-sm font-medium text-stone mb-1">
+            <label className="block text-sm font-medium text-forest mb-1">
               Ville
             </label>
             <CityAutocompleteInput
@@ -470,7 +470,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
               </p>
             )}
             {isNewCity && citySearch.trim() && (
-              <p className="text-xs text-stone-muted mt-1">
+              <p className="text-xs text-forest/60 mt-1">
                 Nouvelle ville — sera ajoutée après vérification
               </p>
             )}
@@ -478,14 +478,14 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
 
           {/* Code postal */}
           <div>
-            <label className="block text-sm font-medium text-stone mb-1">
+            <label className="block text-sm font-medium text-forest mb-1">
               Code postal
             </label>
             <input
               type="text"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
-              className={`w-full px-4 py-2.5 rounded-xl border text-stone focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
+              className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
                 autoFilled && postalCode ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
               }`}
               placeholder="Ex: 51100, 75001..."
@@ -495,14 +495,14 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
 
         {/* Pays — auto-rempli */}
         <div>
-          <label className="block text-sm font-medium text-stone mb-1">
+          <label className="block text-sm font-medium text-forest mb-1">
             Pays
           </label>
           <input
             type="text"
             value={country}
             onChange={(e) => { setCountry(e.target.value); setAutoFilled(false); }}
-            className={`w-full px-4 py-2.5 rounded-xl border text-stone focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
+            className={`w-full px-4 py-2.5 rounded-xl border text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage ${
               autoFilled && country ? "border-sage bg-sage/5" : "border-beige-dark bg-offwhite"
             }`}
             placeholder="Ex: France, Allemagne..."
@@ -515,17 +515,17 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
 
       {/* === SECTION 3 : Compléments === */}
       <fieldset className="space-y-4">
-        <legend className="text-base font-bold text-stone flex items-center gap-2 mb-3">
+        <legend className="text-base font-bold text-forest flex items-center gap-2 mb-3">
           <span className="w-6 h-6 rounded-full bg-sage text-white text-xs flex items-center justify-center font-bold">3</span>
           Pour aller plus loin
-          <span className="text-xs font-normal text-stone-muted ml-1">(optionnel)</span>
+          <span className="text-xs font-normal text-forest/60 ml-1">(optionnel)</span>
         </legend>
 
         {/* Photos */}
         <div>
-          <label className="block text-sm font-medium text-stone mb-2">
+          <label className="block text-sm font-medium text-forest mb-2">
             Photos
-            <span className="text-stone-muted font-normal ml-1">(max 10)</span>
+            <span className="text-forest/60 font-normal ml-1">(max 10)</span>
           </label>
           <PhotoUpload
             photos={photos}
@@ -536,7 +536,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
 
         {/* Tags */}
         <div>
-          <label className="block text-sm font-medium text-stone mb-1">
+          <label className="block text-sm font-medium text-forest mb-1">
             Tags
           </label>
 
@@ -570,7 +570,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
             type="text"
             value={tagsInput}
             onChange={(e) => setTagsInput(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-stone focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
+            className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage"
             placeholder="Écris tes tags séparés par des virgules..."
           />
 
@@ -583,7 +583,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
                 {tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="inline-flex items-center gap-1 text-sm bg-beige text-stone-muted px-3 py-1 rounded-full"
+                    className="inline-flex items-center gap-1 text-sm bg-beige text-forest/60 px-3 py-1 rounded-full"
                   >
                     {tag}
                     <button
@@ -592,7 +592,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
                         const updated = tags.filter((_, idx) => idx !== i);
                         setTagsInput(updated.join(", "));
                       }}
-                      className="text-stone-muted hover:text-red-400 transition-colors ml-0.5 leading-none"
+                      className="text-forest/60 hover:text-red-400 transition-colors ml-0.5 leading-none"
                     >
                       ✕
                     </button>
@@ -630,7 +630,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
         )}
       </button>
 
-      <p className="text-xs text-stone-muted text-center mt-3">
+      <p className="text-xs text-forest/60 text-center mt-3">
         Ta contribution sera vérifiée avant publication.
       </p>
     </form>

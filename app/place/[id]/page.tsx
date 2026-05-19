@@ -25,7 +25,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       {/* Breadcrumb */}
-      <nav className="text-sm text-stone-muted mb-6">
+      <nav className="text-sm text-forest/60 mb-6">
         <Link href="/" className="hover:text-sage-dark">
           Accueil
         </Link>
@@ -41,7 +41,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
             {" / "}
           </>
         )}
-        <span className="text-stone">{place.name}</span>
+        <span className="text-forest">{place.name}</span>
       </nav>
 
       {/* Header */}
@@ -53,19 +53,19 @@ export default async function PlacePage({ params }: PlacePageProps) {
                 {PLACE_TYPE_CONFIG[place.type]?.icon} {PLACE_TYPE_CONFIG[place.type]?.label}
               </span>
               {place.price_range && (
-                <span className="inline-block text-xs font-medium bg-beige text-stone-muted px-2.5 py-1 rounded-full">
+                <span className="inline-block text-xs font-medium bg-beige text-forest/60 px-2.5 py-1 rounded-full">
                   {"€".repeat(place.price_range)}
                 </span>
               )}
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone">
+            <h1 className="text-2xl md:text-3xl font-bold text-forest">
               {place.name}
             </h1>
-            <p className="text-stone-muted mt-1">{place.address}</p>
+            <p className="text-forest/60 mt-1">{place.address}</p>
           </div>
         </div>
 
-        <p className="text-stone mt-4 leading-relaxed">
+        <p className="text-forest mt-4 leading-relaxed">
           {place.description}
         </p>
 
@@ -79,7 +79,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
           {place.tags.map((tag) => (
             <span
               key={tag}
-              className="text-sm bg-beige text-stone-muted px-3 py-1 rounded-full"
+              className="text-sm bg-beige text-forest/60 px-3 py-1 rounded-full"
             >
               {tag}
             </span>
@@ -120,7 +120,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
           {city && (
             <Link
               href={`/city/${city.slug}`}
-              className="inline-flex items-center gap-2 bg-beige text-stone px-5 py-2.5 rounded-full text-sm font-medium hover:bg-beige-dark transition-colors"
+              className="inline-flex items-center gap-2 bg-beige text-forest px-5 py-2.5 rounded-full text-sm font-medium hover:bg-beige-dark transition-colors"
             >
               Retour à {city.name}
             </Link>

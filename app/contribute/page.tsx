@@ -32,8 +32,8 @@ function ContributeContent() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-stone">Suggérer un lieu</h1>
-      <p className="text-stone-muted mt-2">
+      <h1 className="text-2xl font-bold text-forest">Suggérer un lieu</h1>
+      <p className="text-forest/60 mt-2">
         Partage tes bonnes adresses avec la communauté : grandes surfaces,
         épiceries, magasins bio... tous les endroits où trouver des produits vegan.
       </p>

@@ -24,8 +24,8 @@ export function CityCard({ city }: CityCardProps) {
         <div className="px-4 pt-3 pb-4">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h3 className="font-semibold text-stone leading-tight">{city.name}</h3>
-              <p className="text-xs text-stone-muted mt-0.5">{city.country}</p>
+              <h3 className="font-semibold text-forest leading-tight">{city.name}</h3>
+              <p className="text-xs text-forest/60 mt-0.5">{city.country}</p>
             </div>
             <VeganScore score={city.vegan_score} size="sm" showLabel={false} />
           </div>

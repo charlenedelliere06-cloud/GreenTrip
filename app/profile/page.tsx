@@ -46,8 +46,8 @@ export default function ProfilePage() {
             {initial}
           </div>
           <div className="min-w-0">
-            <h1 className="text-xl font-bold text-stone">{displayName}</h1>
-            <p className="text-sm text-stone-muted truncate">{user.email}</p>
+            <h1 className="text-xl font-bold text-forest">{displayName}</h1>
+            <p className="text-sm text-forest/60 truncate">{user.email}</p>
           </div>
         </div>
       </div>
@@ -56,18 +56,18 @@ export default function ProfilePage() {
       <div className="bg-white rounded-2xl p-4 shadow-sm space-y-1">
         <Link
           href="/contribute"
-          className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-beige/50 transition-colors text-sm text-stone"
+          className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-beige/50 transition-colors text-sm text-forest"
         >
           <span className="text-lg">🌿</span>
           <span className="font-medium">Ajouter un lieu</span>
         </Link>
         <Link
           href="/my-contributions"
-          className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-beige/50 transition-colors text-sm text-stone"
+          className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-beige/50 transition-colors text-sm text-forest"
         >
           <span className="text-lg">📋</span>
           <span className="font-medium">Mes contributions</span>
-          <span className="ml-auto text-stone-muted text-xs">Voir le statut →</span>
+          <span className="ml-auto text-forest/60 text-xs">Voir le statut →</span>
         </Link>
       </div>
 

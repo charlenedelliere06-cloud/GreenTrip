@@ -65,10 +65,10 @@ export function SearchBar() {
         }}
         onFocus={() => query.trim().length > 0 && setIsOpen(true)}
         placeholder="Rechercher une ville ou un lieu..."
-        className="w-full px-5 py-3 rounded-full bg-white border border-stone/10 shadow-sm text-stone placeholder:text-stone-muted focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage/50"
+        className="w-full px-5 py-3 rounded-full bg-white border border-forest/10 shadow-sm text-forest placeholder:text-forest/40 focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage/50"
       />
       <svg
-        className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-muted"
+        className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-forest/60"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -82,11 +82,11 @@ export function SearchBar() {
       </svg>
 
       {isOpen && q && (
-        <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-stone/10 overflow-hidden z-50 max-h-80 overflow-y-auto">
+        <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-lg border border-forest/10 overflow-hidden z-50 max-h-80 overflow-y-auto">
           {/* Villes */}
           {filteredCities.length > 0 && (
             <div>
-              <p className="px-4 py-2 text-xs font-semibold text-stone-muted uppercase bg-beige/30">
+              <p className="px-4 py-2 text-xs font-semibold text-forest/60 uppercase bg-beige/30">
                 Villes
               </p>
               {filteredCities.map((city) => (
@@ -102,8 +102,8 @@ export function SearchBar() {
                   <span className="flex items-center gap-2">
                     <span className="text-base">🏙️</span>
                     <span>
-                      <span className="font-medium text-stone">{city.name}</span>
-                      <span className="text-sm text-stone-muted ml-2">{city.country}</span>
+                      <span className="font-medium text-forest">{city.name}</span>
+                      <span className="text-sm text-forest/60 ml-2">{city.country}</span>
                     </span>
                   </span>
                   <span className="text-sm">
@@ -117,7 +117,7 @@ export function SearchBar() {
           {/* Lieux */}
           {filteredPlaces.length > 0 && (
             <div>
-              <p className="px-4 py-2 text-xs font-semibold text-stone-muted uppercase bg-beige/30">
+              <p className="px-4 py-2 text-xs font-semibold text-forest/60 uppercase bg-beige/30">
                 Lieux
               </p>
               {filteredPlaces.map((place) => (
@@ -135,13 +135,13 @@ export function SearchBar() {
                   <span className="flex items-center gap-2">
                     <span className="text-base">{place.type === "supermarket" ? "🛒" : "🌿"}</span>
                     <span>
-                      <span className="font-medium text-stone">{place.name}</span>
+                      <span className="font-medium text-forest">{place.name}</span>
                       {place.cities?.name && (
-                        <span className="text-sm text-stone-muted ml-2">{place.cities.name}</span>
+                        <span className="text-sm text-forest/60 ml-2">{place.cities.name}</span>
                       )}
                     </span>
                   </span>
-                  <span className="text-xs text-stone-muted">
+                  <span className="text-xs text-forest/60">
                     {typeLabels[place.type] || place.type}
                   </span>
                 </button>
@@ -152,8 +152,8 @@ export function SearchBar() {
           {/* Aucun résultat */}
           {!hasResults && (
             <div className="px-4 py-6 text-center">
-              <p className="text-stone-muted text-sm">Aucun résultat pour &quot;{query}&quot;</p>
-              <p className="text-stone-muted/70 text-xs mt-1">Essaie un autre nom de ville ou de lieu</p>
+              <p className="text-forest/60 text-sm">Aucun résultat pour &quot;{query}&quot;</p>
+              <p className="text-forest/40 text-xs mt-1">Essaie un autre nom de ville ou de lieu</p>
             </div>
           )}
         </div>

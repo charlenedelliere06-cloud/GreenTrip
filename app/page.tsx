@@ -15,10 +15,10 @@ export default async function HomePage() {
           <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-sage-dark mb-3">
             Destinations
           </span>
-          <h2 className="text-3xl font-bold text-stone leading-tight">
+          <h2 className="text-3xl font-bold text-forest leading-tight">
             Explore une ville
           </h2>
-          <p className="text-sm text-stone-muted mt-2">
+          <p className="text-sm text-forest/60 mt-2">
             S&eacute;lectionne une destination pour voir ses adresses vegan.
           </p>
         </div>
@@ -45,7 +45,7 @@ export default async function HomePage() {
             <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-sage-dark mb-3">
               Mode d&apos;emploi
             </span>
-            <h2 className="text-2xl font-bold text-stone">
+            <h2 className="text-2xl font-bold text-forest">
               Comment &ccedil;a marche
             </h2>
           </div>
@@ -56,8 +56,8 @@ export default async function HomePage() {
               <div className="w-14 h-14 rounded-full bg-sage/15 ring-1 ring-sage/25 flex items-center justify-center mb-5">
                 <span className="text-xl font-black text-sage-dark">1</span>
               </div>
-              <h3 className="font-semibold text-stone text-base mb-2">Cherche ta ville</h3>
-              <p className="text-sm text-stone-muted leading-relaxed">
+              <h3 className="font-semibold text-forest text-base mb-2">Cherche ta ville</h3>
+              <p className="text-sm text-forest/60 leading-relaxed">
                 Tape le nom d&apos;une destination pour d&eacute;couvrir ses meilleurs magasins vegan.
               </p>
             </div>
@@ -66,8 +66,8 @@ export default async function HomePage() {
               <div className="w-14 h-14 rounded-full bg-sage/15 ring-1 ring-sage/25 flex items-center justify-center mb-5">
                 <span className="text-xl font-black text-sage-dark">2</span>
               </div>
-              <h3 className="font-semibold text-stone text-base mb-2">Trouve tes produits</h3>
-              <p className="text-sm text-stone-muted leading-relaxed">
+              <h3 className="font-semibold text-forest text-base mb-2">Trouve tes produits</h3>
+              <p className="text-sm text-forest/60 leading-relaxed">
                 Supermarch&eacute;s, &eacute;piceries, march&eacute;s bio &mdash; les meilleures adresses pour faire tes courses.
               </p>
             </div>
@@ -76,8 +76,8 @@ export default async function HomePage() {
               <div className="w-14 h-14 rounded-full bg-sage/15 ring-1 ring-sage/25 flex items-center justify-center mb-5">
                 <span className="text-xl font-black text-sage-dark">3</span>
               </div>
-              <h3 className="font-semibold text-stone text-base mb-2">Partage tes bons plans</h3>
-              <p className="text-sm text-stone-muted leading-relaxed">
+              <h3 className="font-semibold text-forest text-base mb-2">Partage tes bons plans</h3>
+              <p className="text-sm text-forest/60 leading-relaxed">
                 Sugg&egrave;re de nouveaux lieux pour aider la communaut&eacute; &agrave; voyager vegan.
               </p>
             </div>

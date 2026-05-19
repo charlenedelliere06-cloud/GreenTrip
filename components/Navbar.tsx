@@ -34,7 +34,7 @@ export function Navbar() {
       <nav className="max-w-5xl mx-auto bg-white/70 backdrop-blur-md rounded-full shadow-sm ring-1 ring-black/5 px-5 h-14 flex items-center justify-between">
 
         {/* Logo */}
-        <Link href="/" className="text-base font-bold text-stone tracking-tight">
+        <Link href="/" className="text-base font-bold text-forest tracking-tight">
           Green<span className="text-sage-dark">Trip</span>
         </Link>
 
@@ -44,8 +44,8 @@ export function Navbar() {
             href="/"
             className={`transition-colors hidden sm:block text-sm ${
               pathname === "/"
-                ? "text-stone font-semibold"
-                : "text-stone-muted hover:text-stone"
+                ? "text-forest font-semibold"
+                : "text-forest/60 hover:text-forest"
             }`}
           >
             Explorer
@@ -65,7 +65,7 @@ export function Navbar() {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen(!menuOpen)}
-                  className="w-8 h-8 rounded-full bg-sage/20 text-stone flex items-center justify-center font-semibold text-xs hover:bg-sage/30 transition-colors"
+                  className="w-8 h-8 rounded-full bg-sage/20 text-forest flex items-center justify-center font-semibold text-xs hover:bg-sage/30 transition-colors"
                 >
                   {initial}
                 </button>
@@ -73,16 +73,16 @@ export function Navbar() {
                 {menuOpen && (
                   <div className="absolute right-0 top-full mt-3 w-52 bg-white rounded-2xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50">
                     <div className="px-4 py-3 border-b border-beige">
-                      <p className="font-medium text-stone text-sm">{displayName}</p>
-                      <p className="text-xs text-stone-muted truncate">{user.email}</p>
+                      <p className="font-medium text-forest text-sm">{displayName}</p>
+                      <p className="text-xs text-forest/60 truncate">{user.email}</p>
                     </div>
-                    <Link href="/profile" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-stone-muted hover:text-stone hover:bg-beige/40 transition-colors">
+                    <Link href="/profile" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-forest/60 hover:text-forest hover:bg-beige/40 transition-colors">
                       Mon profil
                     </Link>
-                    <Link href="/my-contributions" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-stone-muted hover:text-stone hover:bg-beige/40 transition-colors">
+                    <Link href="/my-contributions" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-forest/60 hover:text-forest hover:bg-beige/40 transition-colors">
                       Mes contributions
                     </Link>
-                    <Link href="/contribute" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-stone-muted hover:text-stone hover:bg-beige/40 transition-colors">
+                    <Link href="/contribute" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-forest/60 hover:text-forest hover:bg-beige/40 transition-colors">
                       Suggérer un lieu
                     </Link>
                     <button
@@ -97,7 +97,7 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/login" className="text-stone-muted hover:text-stone transition-colors">
+              <Link href="/login" className="text-forest/60 hover:text-forest transition-colors">
                 Se connecter
               </Link>
               <Link
