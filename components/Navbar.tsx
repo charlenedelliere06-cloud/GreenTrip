@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
 export function Navbar() {
   const { user, loading, signOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -38,7 +40,14 @@ export function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-3 text-sm">
-          <Link href="/" className="text-forest/50 hover:text-forest transition-colors hidden sm:block">
+          <Link
+            href="/"
+            className={`transition-colors hidden sm:block text-sm ${
+              pathname === "/"
+                ? "text-forest font-semibold"
+                : "text-forest/50 hover:text-forest"
+            }`}
+          >
             Explorer
           </Link>
 
@@ -48,7 +57,7 @@ export function Navbar() {
             <>
               <Link
                 href="/contribute"
-                className="bg-forest text-white text-xs px-4 py-2 rounded-full hover:bg-forest-light transition-colors font-medium"
+                className="bg-sage text-white text-xs px-4 py-2 rounded-full hover:bg-sage-dark transition-colors font-medium"
               >
                 + Ajouter
               </Link>
@@ -93,7 +102,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/login?redirect=/contribute"
-                className="bg-forest text-white text-xs px-4 py-2 rounded-full hover:bg-forest-light transition-colors font-medium"
+                className="bg-sage text-white text-xs px-4 py-2 rounded-full hover:bg-sage-dark transition-colors font-medium"
               >
                 Contribuer
               </Link>

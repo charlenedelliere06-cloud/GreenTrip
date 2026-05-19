@@ -26,7 +26,7 @@ export default function RootLayout({
         <AuthProvider>
           <Navbar />
           <main className="min-h-screen pt-20">{children}</main>
-          <footer className="bg-forest text-white mt-16">
+          <footer className="bg-sage-dark text-white mt-16">
             <div className="max-w-6xl mx-auto px-4 py-12">
 
               {/* Grille 3 colonnes */}
@@ -38,7 +38,7 @@ export default function RootLayout({
                     Green<span className="text-sage-light">Trip</span>
                   </p>
                   <p className="text-sm text-white/50 mt-3 leading-relaxed">
-                    Le guide vegan du voyageur — trouve des produits partout dans le monde.
+                    Le guide <span className="text-sage-light">vegan</span> du voyageur — trouve des produits partout dans le monde.
                   </p>
                 </div>
 
