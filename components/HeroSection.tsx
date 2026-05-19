@@ -3,7 +3,7 @@ import { GeolocateButton } from "@/components/GeolocateButton"
 
 export function HeroSection() {
   return (
-    <section className="bg-cream px-6 pt-14 pb-16">
+    <section className="bg-white px-6 pt-14 pb-16">
       <div className="max-w-xl mx-auto text-center">
 
         <h1
