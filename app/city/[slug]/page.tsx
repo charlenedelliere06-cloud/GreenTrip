@@ -77,11 +77,11 @@ export default async function CityPage({ params }: CityPageProps) {
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Description */}
-        <p className="text-forest text-base md:text-lg max-w-3xl font-medium leading-relaxed">{city.description}</p>
+        <p className="text-stone text-base md:text-lg max-w-3xl font-medium leading-relaxed">{city.description}</p>
 
         {/* Carte */}
         <section className="mt-8">
-          <h2 className="text-xl font-bold text-forest mb-4">Carte</h2>
+          <h2 className="text-xl font-bold text-stone mb-4">Carte</h2>
           <Map center={[city.lat, city.lng]} places={places} nearbyPlaces={nearbyPlaces} citySlug={city.slug} />
         </section>
 
@@ -91,8 +91,8 @@ export default async function CityPage({ params }: CityPageProps) {
         {/* Magasins à proximité */}
         {nearbyPlaces.length > 0 && (
           <section className="mt-10">
-            <h2 className="text-xl font-bold text-forest mb-1">Dans les environs</h2>
-            <p className="text-forest/50 text-sm mb-4">Magasins à moins de 80 km de {city.name}</p>
+            <h2 className="text-xl font-bold text-stone mb-1">Dans les environs</h2>
+            <p className="text-stone-muted text-sm mb-4">Magasins à moins de 80 km de {city.name}</p>
             <div className="space-y-3">
               {nearbyPlaces.map((place: NearbyPlace) => (
                 <Link
@@ -103,13 +103,13 @@ export default async function CityPage({ params }: CityPageProps) {
                   <div className="flex items-center gap-3">
                     <span className="text-xl">{place.type === "supermarket" ? "🛒" : "🌿"}</span>
                     <div>
-                      <p className="font-medium text-forest group-hover:text-sage-dark transition-colors">
+                      <p className="font-medium text-stone group-hover:text-sage-dark transition-colors">
                         {place.name}
                       </p>
-                      <p className="text-sm text-forest/50">{place.cityName}</p>
+                      <p className="text-sm text-stone-muted">{place.cityName}</p>
                     </div>
                   </div>
-                  <span className="text-xs text-forest/40 shrink-0 ml-2">
+                  <span className="text-xs text-stone-muted shrink-0 ml-2">
                     ~{place.distanceKm} km
                   </span>
                 </Link>
@@ -123,10 +123,10 @@ export default async function CityPage({ params }: CityPageProps) {
           <div className="bg-gradient-to-br from-sage/10 to-beige rounded-2xl p-7 flex flex-col sm:flex-row items-center gap-5">
             <div className="text-4xl">🌿</div>
             <div className="flex-1 text-center sm:text-left">
-              <h3 className="text-lg font-bold text-forest">
+              <h3 className="text-lg font-bold text-stone">
                 Tu connais une bonne adresse à {city.name} ?
               </h3>
-              <p className="text-forest/60 text-sm mt-1">
+              <p className="text-stone-muted text-sm mt-1">
                 Magasin entièrement vegan, épicerie bio ou supermarché avec un bon rayon vegan — partage-le avec la communauté !
               </p>
             </div>

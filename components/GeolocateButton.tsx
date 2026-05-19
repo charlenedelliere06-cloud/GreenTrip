@@ -69,10 +69,10 @@ export function GeolocateButton() {
       <button
         onClick={handleGeolocate}
         disabled={locating}
-        className="inline-flex items-center gap-1.5 text-sm text-forest/35 hover:text-forest/60 transition-colors disabled:opacity-40"
+        className="inline-flex items-center gap-1.5 text-sm text-stone-muted hover:text-stone transition-colors disabled:opacity-40"
       >
         {locating ? (
-          <span className="w-3 h-3 border border-forest/30 border-t-forest/60 rounded-full animate-spin" />
+          <span className="w-3 h-3 border border-stone/20 border-t-stone/50 rounded-full animate-spin" />
         ) : (
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />

@@ -12,13 +12,13 @@ export default async function HomePage() {
       {/* Destinations */}
       <section className="max-w-6xl mx-auto px-4 py-14">
         <div className="mb-10">
-          <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-sage mb-3">
+          <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-sage-dark mb-3">
             Destinations
           </span>
-          <h2 className="text-3xl font-bold text-forest leading-tight">
+          <h2 className="text-3xl font-bold text-stone leading-tight">
             Explore une ville
           </h2>
-          <p className="text-sm text-forest/50 mt-2">
+          <p className="text-sm text-stone-muted mt-2">
             S&eacute;lectionne une destination pour voir ses adresses vegan.
           </p>
         </div>
@@ -38,14 +38,14 @@ export default async function HomePage() {
       </section>
 
       {/* Comment ça marche */}
-      <section className="bg-sage/5 py-16 px-4">
+      <section className="bg-beige/40 py-16 px-4">
         <div className="max-w-4xl mx-auto">
 
           <div className="text-center mb-14">
-            <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-sage mb-3">
+            <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-sage-dark mb-3">
               Mode d&apos;emploi
             </span>
-            <h2 className="text-2xl font-bold text-forest">
+            <h2 className="text-2xl font-bold text-stone">
               Comment &ccedil;a marche
             </h2>
           </div>
@@ -56,8 +56,8 @@ export default async function HomePage() {
               <div className="w-14 h-14 rounded-full bg-sage/15 ring-1 ring-sage/25 flex items-center justify-center mb-5">
                 <span className="text-xl font-black text-sage-dark">1</span>
               </div>
-              <h3 className="font-semibold text-forest text-base mb-2">Cherche ta ville</h3>
-              <p className="text-sm text-forest/55 leading-relaxed">
+              <h3 className="font-semibold text-stone text-base mb-2">Cherche ta ville</h3>
+              <p className="text-sm text-stone-muted leading-relaxed">
                 Tape le nom d&apos;une destination pour d&eacute;couvrir ses meilleurs magasins vegan.
               </p>
             </div>
@@ -66,8 +66,8 @@ export default async function HomePage() {
               <div className="w-14 h-14 rounded-full bg-sage/15 ring-1 ring-sage/25 flex items-center justify-center mb-5">
                 <span className="text-xl font-black text-sage-dark">2</span>
               </div>
-              <h3 className="font-semibold text-forest text-base mb-2">Trouve tes produits</h3>
-              <p className="text-sm text-forest/55 leading-relaxed">
+              <h3 className="font-semibold text-stone text-base mb-2">Trouve tes produits</h3>
+              <p className="text-sm text-stone-muted leading-relaxed">
                 Supermarch&eacute;s, &eacute;piceries, march&eacute;s bio &mdash; les meilleures adresses pour faire tes courses.
               </p>
             </div>
@@ -76,8 +76,8 @@ export default async function HomePage() {
               <div className="w-14 h-14 rounded-full bg-sage/15 ring-1 ring-sage/25 flex items-center justify-center mb-5">
                 <span className="text-xl font-black text-sage-dark">3</span>
               </div>
-              <h3 className="font-semibold text-forest text-base mb-2">Partage tes bons plans</h3>
-              <p className="text-sm text-forest/55 leading-relaxed">
+              <h3 className="font-semibold text-stone text-base mb-2">Partage tes bons plans</h3>
+              <p className="text-sm text-stone-muted leading-relaxed">
                 Sugg&egrave;re de nouveaux lieux pour aider la communaut&eacute; &agrave; voyager vegan.
               </p>
             </div>
