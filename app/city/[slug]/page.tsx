@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { getCityBySlug, getPlacesByCity, getPlacesNearbyCity, NearbyPlace } from "@/lib/supabase-queries";
 import { VeganScore } from "@/components/VeganScore";
 import { Map } from "@/components/Map";
@@ -7,6 +8,33 @@ import { CityPlacesSection } from "@/components/CityPlacesSection";
 
 interface CityPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: CityPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const city = await getCityBySlug(slug);
+
+  if (!city) {
+    return { title: "Ville introuvable" };
+  }
+
+  const title = `${city.name} — Guide vegan`;
+  const description = `Trouve les supermarchés, épiceries bio et magasins vegan à ${city.name}, ${city.country}. ${city.description ?? ""}`.trim();
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      ...(city.image_url ? { images: [{ url: city.image_url }] } : {}),
+    },
+    twitter: {
+      title,
+      description,
+      ...(city.image_url ? { images: [city.image_url] } : {}),
+    },
+  };
 }
 
 export default async function CityPage({ params }: CityPageProps) {

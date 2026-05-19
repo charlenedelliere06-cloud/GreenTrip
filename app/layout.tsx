@@ -5,10 +5,30 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/Navbar";
 import "./globals.css";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://greentrip.app";
+
 export const metadata: Metadata = {
-  title: "GreenTrip — Guide de voyage vegan",
+  title: {
+    default: "GreenTrip — Guide de voyage vegan",
+    template: "%s | GreenTrip",
+  },
   description:
-    "Trouvez les supermarchés et épiceries avec des produits vegan partout dans le monde.",
+    "Trouve les supermarchés, épiceries et marchés bio avec des produits vegan partout dans le monde.",
+  metadataBase: new URL(siteUrl),
+  openGraph: {
+    type: "website",
+    siteName: "GreenTrip",
+    title: "GreenTrip — Guide de voyage vegan",
+    description:
+      "Trouve les supermarchés, épiceries et marchés bio avec des produits vegan partout dans le monde.",
+    url: siteUrl,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GreenTrip — Guide de voyage vegan",
+    description:
+      "Trouve les supermarchés, épiceries et marchés bio avec des produits vegan partout dans le monde.",
+  },
 };
 
 export default function RootLayout({

@@ -40,5 +40,5 @@ export async function getPlacesClient(): Promise<PlaceWithCity[]> {
     console.error("Erreur getPlacesClient:", error);
     return [];
   }
-  return (data as PlaceWithCity[]) || [];
+  return (data as unknown as PlaceWithCity[]) || [];
 }
