@@ -91,6 +91,7 @@ export async function createContribution(body: Record<string, unknown>) {
     .from("contributions")
     .insert({
       user_id: body.user_id as string,
+      user_display_name: (body.user_display_name as string) || null,
       type: "place",
       place_name: body.place_name as string,
       place_type: body.place_type as string,

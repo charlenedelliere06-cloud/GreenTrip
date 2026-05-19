@@ -30,6 +30,12 @@ function ContributeContent() {
 
   if (!user) return null;
 
+  const displayName =
+    user.user_metadata?.display_name ||
+    user.user_metadata?.full_name ||
+    user.email?.split("@")[0] ||
+    "";
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <h1 className="text-2xl font-bold text-forest">Suggérer un lieu</h1>
@@ -37,7 +43,7 @@ function ContributeContent() {
         Partage tes bonnes adresses avec la communauté : grandes surfaces,
         épiceries, magasins bio... tous les endroits où trouver des produits vegan.
       </p>
-      <ContributePlaceForm userId={user.id} />
+      <ContributePlaceForm userId={user.id} userDisplayName={displayName} />
     </div>
   );
 }

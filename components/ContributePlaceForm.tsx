@@ -91,6 +91,7 @@ function CityAutocompleteInput({
 
 interface ContributePlaceFormProps {
   userId: string;
+  userDisplayName?: string;
 }
 
 const placeTypes = Object.entries(PLACE_TYPE_CONFIG).map(([value, v]) => ({
@@ -99,7 +100,7 @@ const placeTypes = Object.entries(PLACE_TYPE_CONFIG).map(([value, v]) => ({
   icon: v.icon,
 }));
 
-export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
+export function ContributePlaceForm({ userId, userDisplayName }: ContributePlaceFormProps) {
   const searchParams = useSearchParams();
   const initialLat = searchParams.get("lat") ? parseFloat(searchParams.get("lat")!) : null;
   const initialLng = searchParams.get("lng") ? parseFloat(searchParams.get("lng")!) : null;
@@ -195,6 +196,7 @@ export function ContributePlaceForm({ userId }: ContributePlaceFormProps) {
 
       const body = {
         user_id: userId,
+        user_display_name: userDisplayName || null,
         type: "place" as const,
         city_id: cityId || undefined,
         city_name: citySearch.trim(),
