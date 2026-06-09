@@ -91,7 +91,6 @@ export async function createContribution(body: Record<string, unknown>) {
     .from("contributions")
     .insert({
       user_id: body.user_id as string,
-      user_display_name: (body.user_display_name as string) || null,
       type: "place",
       place_name: body.place_name as string,
       place_type: body.place_type as string,
@@ -212,7 +211,16 @@ export async function updateContributionStatus(
       price_range: contribution.place_price_range || null,
       status: "approved",
       added_by: contribution.user_id,
-      added_by_name: contribution.user_display_name || null,
+      added_by_name: await (async () => {
+        try {
+          const admin = createSupabaseAdmin();
+          const { data } = await admin.auth.admin.getUserById(contribution.user_id);
+          return data?.user?.user_metadata?.display_name
+            || data?.user?.user_metadata?.full_name
+            || data?.user?.email?.split("@")[0]
+            || null;
+        } catch { return null; }
+      })(),
     });
 
     if (placeError) {
