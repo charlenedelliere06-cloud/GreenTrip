@@ -100,7 +100,7 @@ function buildRejectedEmail(placeName: string, cityName: string) {
           <div style="background-color:#ffffff; padding:40px 32px 32px;">
 
             <h2 style="color:#333333; font-size:22px; text-align:center; margin:0 0 20px; font-weight:700;">
-              Merci pour ta contribution
+              Merci pour ta contribution !
             </h2>
 
             <p style="color:#555555; font-size:15px; line-height:1.7; text-align:center; margin:0 0 12px;">
@@ -172,7 +172,7 @@ function buildReceivedEmail(placeName: string, cityName: string) {
             </p>
 
             <p style="color:#888888; font-size:14px; line-height:1.7; text-align:center; margin:0 0 32px;">
-              Notre équipe va vérifier les informations avant de le publier. On te tient au courant dès que c'est validé !
+              Notre équipe va vérifier les informations avant de publier l'adresse. On te tient au courant dès que c'est validé !
             </p>
 
             <!-- Bouton CTA -->
