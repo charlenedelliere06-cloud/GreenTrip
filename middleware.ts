@@ -25,14 +25,14 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Rafraîchir la session
-  await supabase.auth.getUser();
+  // Rafraîchir la session (lecture cookie, pas d'appel réseau)
+  await supabase.auth.getSession();
 
   return supabaseResponse;
 }
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
