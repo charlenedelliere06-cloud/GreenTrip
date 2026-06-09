@@ -354,12 +354,11 @@ export function ContributePlaceForm({ userId, userDisplayName }: ContributePlace
         {/* Description */}
         <div>
           <label className="block text-sm font-medium text-forest mb-1">
-            Description
+            Description <span className="text-forest/40 font-normal">(optionnel)</span>
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            required
             maxLength={500}
             rows={3}
             className="w-full px-4 py-2.5 rounded-xl border border-beige-dark bg-offwhite text-forest focus:outline-none focus:ring-2 focus:ring-sage/30 focus:border-sage resize-none"
