@@ -11,13 +11,21 @@ export function CityCard({ city }: CityCardProps) {
     <Link href={`/city/${city.slug}`} className="group block">
       <div className="bg-white rounded-2xl overflow-hidden shadow-sm group-hover:shadow-md group-hover:-translate-y-1 transition-all duration-300">
 
-        {/* Illustration / Photo */}
-        <div className="h-48 overflow-hidden">
-          <img
-            src={city.image_url || "/images/city-default.png"}
-            alt={city.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
+        {/* Photo ou fond dégradé */}
+        <div className="h-40 overflow-hidden">
+          {city.image_url ? (
+            <img
+              src={city.image_url}
+              alt={city.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-sage/20 via-beige to-sage/10 flex items-end px-5 pb-4">
+              <span className="text-4xl font-black text-sage-dark/20 leading-none select-none">
+                {city.name}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Infos */}
